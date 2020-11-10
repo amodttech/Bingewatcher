@@ -47,11 +47,12 @@ Movie.create([
 
 
 User.create([
-    {name: 'Aaron', password: 'password'},
+    {name: 'a', password: 'a'},
     {name: 'Julio', password: 'fizz'},
     {name: 'Jonathan', password: 'buzz'},
     {name: 'Anber', password: 'fizzbuzz'},
-    {name: 'Melissa', password: 'wordpass'}
+    {name: 'Melissa', password: 'wordpass'},
+    {name: 'Aaron', password: 'password'}
 ])
 
 m1 = Movie.first
@@ -66,9 +67,11 @@ u4 = User.fourth
 u5 = User.fifth
 
 
+
 Review.create([
     {user: u1, movie: m1, rating: 3},
-    {user_id: u2.id, movie_id: m2.id , rating: 5}
+    {user_id: u2.id, movie_id: m2.id , rating: 5},
+
     # {user_id: , movie_id: , rating: },
     # {user_id: , movie_id: , rating: }
 ])
@@ -84,17 +87,17 @@ Movielist.create([
     {user: u5}
 ])
 
-# ml1 = Movielist.first
-# ml2 = Movielist.second
-# ml3 = Movielist.third
-# ml4 = Movielist.fourth
-# ml5 = Movielist.fifth
+ml1 = Movielist.first
+ml2 = Movielist.second
+ml3 = Movielist.third
+ml4 = Movielist.fourth
+ml5 = Movielist.fifth
 
-# AddMovieToMovielist.create([
-#     {movie: m1, movielist: ml3, priority: 1},
-#     {movie: m2, movielist: ml5, priority: 2},
-#     {movie: m3, movielist: ml1, priority: 3}
-# ])
+Addmovietomovielist.create([
+    {movie: Movie.all.sample, movielist: Movielist.all.sample, priority: 1},
+    {movie: m2, movielist: ml5, priority: 2},
+    {movie: m3, movielist: ml1, priority: 3}
+])
 
   
 # Driver.destroy_all

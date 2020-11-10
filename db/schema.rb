@@ -12,7 +12,7 @@
 
 ActiveRecord::Schema.define(version: 2020_11_10_021454) do
 
-  create_table "Addmovietomovielists", force: :cascade do |t|
+  create_table "addmovietomovielists", force: :cascade do |t|
     t.integer "movie_id"
     t.integer "movielist_id"
     t.integer "priority"

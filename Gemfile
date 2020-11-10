@@ -16,3 +16,4 @@ gem 'rest-client'
 # to prettify-CLI
 gem 'tty-prompt', '~> 0.22.0'
 gem 'artii', '~> 2.1', '>= 2.1.2'
+gem 'rainbow'

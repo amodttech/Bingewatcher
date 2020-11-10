@@ -3,6 +3,7 @@ require "pry"
 require 'rest-client'  
 require 'json' 
 
+
 class CLI
     @@prompt = TTY::Prompt.new
     @@artii = Artii::Base.new :font => 'slant'
@@ -13,7 +14,10 @@ class CLI
         puts @@artii.asciify("Welcome to")
         puts @@artii.asciify("Bingewatcher")
         self.main_menu
+        # login_main_menu
     end
+
+## LOGIN IN SCREENS
 
     def main_menu
         sleep(1)
@@ -32,13 +36,145 @@ class CLI
     end
 
     def login
-        
+        username = @@prompt.ask("What is your Name?")
+        password = @@prompt.mask("What is your Password?")
+        @@user = User.find_by(name: username, password: password)
+        if @@user
+            system('clear')
+            self.login_main_menu
+        else
+            puts "Incorrect"
+            sleep(1)
+            puts "taking you back"
+            sleep(1)
+            self.main_menu
+        end
+    end
+
+    def signup
+        username = @@prompt.ask("What would you like to be called?")
+        password = @@prompt.ask("What would you like your password to be?")
+        @@user = User.create(name: username, password: password)
+        puts "Thank you for joining us"
+        sleep(0.5)
+        puts "Taking you to the login now"
+        sleep(0.8)
+        system('clear')
+        self.main_menu
     end
 
 
+### AFTER SUCCESSFUL LOGIN
+
+    def login_main_menu
+        puts "Hi #{@@user.name} what would you like to do?"
+        menu = @@prompt.select("Main Menu") do |prompt|
+            prompt.choice "Reviews"
+            prompt.choice "Movies"
+            prompt.choice "Logout"
+            prompt.choice Rainbow("Delete User").red
+        end
+        case menu
+        when "Reviews"
+            self.reviews_menu
+        when "Movies"
+            self.movies_menu
+        when "Logout"
+            sleep(0.5)
+            system('clear')
+            sleep(1)
+            puts "goodbye"
+            sleep(2)
+            self.welcome    
+        when Rainbow("Delete User").red
+            self.delete_menu
+        end
+    end
+
+    def reviews_menu
+      system('clear')
+      puts "Reviews Menu"
+      menu = @@prompt.select("What would you like to do?") do |prompt|
+        prompt.choice "Review a new Movie"
+        prompt.choice "View your Reviews"
+        prompt.choice "Return to Main Menu"
+      end
+      case menu
+      when "Review a new Movie"
+        self.create_review
+      when "View your Reviews"
+        self.view_reviews
+      when "Return to Main Menu"
+        sleep(0.5)
+        self.login_main_menu
+      end
+    end
+
+    def movies_menu
+        system('clear')
+        puts "Movies Menu"
+        menu = @@prompt.select("What would you like to do?") do |prompt|
+            prompt.choice "Add a new Movie"
+            prompt.choice "Delete a Movie"
+            prompt.choice "Return to Main Menu"
+        end
+        case menu
+        when "Add a new Movie"
+              
+        when "Delete a Movie"
+
+        when "Return to Main Menu"  
+            self.login_main_menu  
+        end
+
+    end
 
 
+##Review
 
+    def view_reviews ## currently outputs nicely
+        results =  Review.all.select {|review| review.user_id == @@user.id}
+        results.each do |review|
+            puts "You have watched #{review.movie.title}, and given it #{review.rating} stars."
+        end
+    end
+
+    def create_review  ## Is currently returning an instance, could be more legible
+        system('clear')
+        puts "New Review"
+        mov_title = @@prompt.ask("What is the Movie title?", required: true)
+        mov_rating = @@prompt.ask("How many stars out of five would you rate this movie?")
+        mov = Movie.find_by(title: mov_title)
+        new_review = Review.create(user: @@user, movie: mov, rating: mov_rating)
+        puts new_review
+        sleep(1)
+        puts "Thank you for your insights, your review has been documented.  Returning you to the menu."
+        sleep(3)
+        self.reviews_menu
+    end
+
+    
+    
+    
+  ## DELETE MENU ##
+
+    def delete_menu
+        system('clear')
+        puts "Delete User Menu"
+        menu = @@prompt.select("Are you sure you want to delete your user?") do |prompt|
+            prompt.choice "Yes"
+            prompt.choice "No"
+        end
+        case menu
+        when "Yes"
+        
+        when "No"  
+            self.login_main_menu
+        end      
+
+    end
+
+end
     # def auth_sequence
     #     sleep(0.2)
     #     @@prompt.ask('What is your name?', required: true)
@@ -101,30 +237,30 @@ class CLI
     #     end
     # end
 
-    def choose_category
-        # displays all seeded categories to user 
-        category_titles = Category.all.map { |cat| cat.title }
-        chosen_title = @@prompt.enum_select("Choose your category", category_titles, per_page: 10)
-        Category.find_by(title: chosen_title)
-    end
+    # def choose_category
+    #     # displays all seeded categories to user 
+    #     category_titles = Category.all.map { |cat| cat.title }
+    #     chosen_title = @@prompt.enum_select("Choose your category", category_titles, per_page: 10)
+    #     Category.find_by(title: chosen_title)
+    # end
 
-    def get_category_data(category)
-        # binding.pry
-        resp = RestClient.get("http://jservice.io/api/category?id=#{category.api_id}")
-        JSON.parse(resp)
-        # AI: send a request to the API for clues from the correct category, passed in as an argument
-    end
+    # def get_category_data(category)
+    #     # binding.pry
+    #     resp = RestClient.get("http://jservice.io/api/category?id=#{category.api_id}")
+    #     JSON.parse(resp)
+    #     # AI: send a request to the API for clues from the correct category, passed in as an argument
+    # end
 
-    def play_game(category_id, category_data)
-        # currently only shows 2 quesions in order to get the get the total possible score and
-        # display the questions and get actual scores 
-        possible = category_data["clues"].slice(0,2).sum { |clue| clue["value"] }
-        total = category_data["clues"].slice(0,2).map do |clue|
-            self.give_clue_prompt(category_data["title"], clue)
-        end.sum
-        puts "You scored #{total}!"
-        Game.create(user_id: @@user.id, category_id: category_id, score: total, total_possible: possible)
-    end
+    # def play_game(category_id, category_data)
+    #     # currently only shows 2 quesions in order to get the get the total possible score and
+    #     # display the questions and get actual scores 
+    #     possible = category_data["clues"].slice(0,2).sum { |clue| clue["value"] }
+    #     total = category_data["clues"].slice(0,2).map do |clue|
+    #         self.give_clue_prompt(category_data["title"], clue)
+    #     end.sum
+    #     puts "You scored #{total}!"
+    #     Game.create(user_id: @@user.id, category_id: category_id, score: total, total_possible: possible)
+    # end
 
     # def give_clue_prompt(title, clue)
     #     attempts = 0
@@ -147,4 +283,3 @@ class CLI
     #     sleep(1.5)
     #     return 0
     # end
-end
