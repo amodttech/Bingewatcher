@@ -115,12 +115,15 @@ class CLI
         puts "Movies Menu"
         menu = @@prompt.select("What would you like to do?") do |prompt|
             prompt.choice "Add a new Movie"
+            prompt.choice "See a list of Movies"
             prompt.choice "Delete a Movie"
             prompt.choice "Return to Main Menu"
         end
         case menu
         when "Add a new Movie"
-              
+              self.create_movie
+        when "See a list of Movies"
+            Movie.all.each {|movie| puts movie.title}
         when "Delete a Movie"
 
         when "Return to Main Menu"  
@@ -130,7 +133,7 @@ class CLI
     end
 
 
-##Review
+        ##Review Methods##
 
     def view_reviews ## currently outputs nicely
         results =  Review.all.select {|review| review.user_id == @@user.id}
@@ -154,6 +157,37 @@ class CLI
     end
 
     
+    ###Movie Methods###
+
+    def create_movie  ###adjust sleep timers
+        system('clear')
+        puts "New Movie"
+        mov_title = @@prompt.ask("What is the Movie title?", require: true)
+        if Movie.all.any? {|movie| movie.title == mov_title}
+            puts "Hey, it looks like #{mov_title} already has an entry."
+            var1 = @@prompt.yes?("Would you like to leave a review?")
+            if var1 
+                self.create_review
+            else
+                puts "okay fine, sending you back to the movie menu"
+                sleep(0.7)
+                self.movies_menu
+            end
+        else
+            new_movie = Movie.create(title: mov_title)
+            puts "Movie: '#{new_movie.title}' has been created!"
+            var2 = @@prompt.yes?("Would you like to leave a review?")
+            if var2 
+                self.create_review
+            else
+                puts "okay fine, sending you back to the movie menu"
+                sleep(0.7)
+                self.movies_menu
+            end
+        end
+    end
+
+
     
     
   ## DELETE MENU ##
