@@ -35,4 +35,4 @@ Movie.create(title: 'Titanic', director: 'James Cameron', year: 1997, genre: 'Dr
 User.create(name: 'Aaron')
 User.create(name: 'Julio')
 
-Review.create(user_id: u1, movie_id: m1, rating: 3)
+# Review.create(user_id: u1, movie_id: m1, rating: 3)

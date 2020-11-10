@@ -1,5 +1,5 @@
 class AddMovieToMovielist < ActiveRecord::Base
-    # belongs_to :movie
-    # belongs_to :movielist
+    belongs_to :movie
+    belongs_to :movielist
 end
 
