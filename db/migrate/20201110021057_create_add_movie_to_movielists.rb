@@ -1,4 +1,4 @@
-class CreateAddToMovielists < ActiveRecord::Migration[6.0]
+class CreateAddMovieToMovielists < ActiveRecord::Migration[6.0]
   def change
     create_table :Addmovietomovielists do |t|
       t.integer :movie_id

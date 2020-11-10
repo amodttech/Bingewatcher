@@ -12,32 +12,65 @@ class CLI
         system('clear')
         puts @@artii.asciify("Welcome to")
         puts @@artii.asciify("Bingewatcher")
-        # self.auth_sequence
+        self.main_menu
     end
+
+    def main_menu
+        sleep(1)
+        system('clear')
+        splash = @@prompt.select("Please Log In or Sign Up!") do |prompt| 
+            prompt.choice "Log In"
+            prompt.choice "Sign Up"
+        end
+        case splash 
+        when "Log In"
+            self.login 
+        when "Sign Up"
+            self.signup 
+        end
+
+    end
+
+    def login
+        
+    end
+
+
+
+
+
+    # def auth_sequence
+    #     sleep(0.2)
+    #     @@prompt.ask('What is your name?', required: true)
+
+
+    # end
+
+
 
     # def auth_sequence
     #     sleep(1.5)
     #     @@user = User.first
-    #     self.display_menu
-    #     # choices = { "Log In" => 1,
-    #     #     "Sign Up" => 2
-    #     # }
-    #     # choice = @@prompt.select("Would you like to sign up or log in?", choices)
-    #     # if choice == 1
-    #     #     @@user = User.login
-    #     #     if @@user
-    #     #         self.display_menu
-    #     #     else
-    #     #         self.auth_sequence
-    #     #     end
-    #     # else
-    #     #     @@user = User.signup
-    #     #     if @@user
-    #     #         self.display_menu
-    #     #     else
-    #     #         self.auth_sequence
-    #     #     end
-    #     # end
+    #     #self.display_menu
+    #     choices = { "Log In" => 1,
+    #         "Sign Up" => 2
+    #     }
+    #     choice = @@prompt.select("Would you like to sign up or log in?", choices)
+    #     if choice == 1
+    #         @@user = User.login
+    #         if @@user
+    #             self.display_menu
+    #         else
+    #             self.auth_sequence
+    #         end
+    #     else
+    #         @@user = User.signup
+    #         if @@user
+    #             self.display_menu
+    #         else
+    #             self.auth_sequence
+    #         end
+    #     end
     # end
 
     # def display_menu
@@ -68,30 +101,30 @@ class CLI
     #     end
     # end
 
-    # def choose_category
-    #     # displays all seeded categories to user 
-    #     category_titles = Category.all.map { |cat| cat.title }
-    #     chosen_title = @@prompt.enum_select("Choose your category", category_titles, per_page: 10)
-    #     Category.find_by(title: chosen_title)
-    # end
+    def choose_category
+        # displays all seeded categories to user 
+        category_titles = Category.all.map { |cat| cat.title }
+        chosen_title = @@prompt.enum_select("Choose your category", category_titles, per_page: 10)
+        Category.find_by(title: chosen_title)
+    end
 
-    # def get_category_data(category)
-    #     # binding.pry
-    #     resp = RestClient.get("http://jservice.io/api/category?id=#{category.api_id}")
-    #     JSON.parse(resp)
-    #     # AI: send a request to the API for clues from the correct category, passed in as an argument
-    # end
+    def get_category_data(category)
+        # binding.pry
+        resp = RestClient.get("http://jservice.io/api/category?id=#{category.api_id}")
+        JSON.parse(resp)
+        # AI: send a request to the API for clues from the correct category, passed in as an argument
+    end
 
-    # def play_game(category_id, category_data)
-    #     # currently only shows 2 quesions in order to get the get the total possible score and
-    #     # display the questions and get actual scores 
-    #     possible = category_data["clues"].slice(0,2).sum { |clue| clue["value"] }
-    #     total = category_data["clues"].slice(0,2).map do |clue|
-    #         self.give_clue_prompt(category_data["title"], clue)
-    #     end.sum
-    #     puts "You scored #{total}!"
-    #     Game.create(user_id: @@user.id, category_id: category_id, score: total, total_possible: possible)
-    # end
+    def play_game(category_id, category_data)
+        # currently only shows 2 quesions in order to get the get the total possible score and
+        # display the questions and get actual scores 
+        possible = category_data["clues"].slice(0,2).sum { |clue| clue["value"] }
+        total = category_data["clues"].slice(0,2).map do |clue|
+            self.give_clue_prompt(category_data["title"], clue)
+        end.sum
+        puts "You scored #{total}!"
+        Game.create(user_id: @@user.id, category_id: category_id, score: total, total_possible: possible)
+    end
 
     # def give_clue_prompt(title, clue)
     #     attempts = 0
