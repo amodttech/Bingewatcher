@@ -20,16 +20,16 @@ require 'json'
 
 
 
-# Movie.destroy_all
-# # Review.destroy_all
-# # User.destroy_all
-# # Movielist.destroy_all
-# # AddMovieToMovieList.destroy_all
+Movie.destroy_all
+Review.destroy_all
+User.destroy_all
+Movielist.destroy_all
+# AddMovieToMovielist.destroy_all
 
-# m1 = Movie.create(:title=>'Deep Red', :director=>'Dario Argento', :year=>1975, :genre=>'Horror', :country=>'Italy', :synopsis=>'A pianist investigates a series of murders performed by a mysterious figure wearing black leather gloves.')
-# m2 = Movie.create(:title=>'Phantom of the Paradise', :director=>'Brian de Palma', :year=>1974, :genre=>'Horror', :country=>'USA', :synopsis=>'A pianists lifes work is stolen by a record tycoon, and he murders everyone who plays it.')
-# m3 = Movie.create(:title=>'Saving Private Ryan', :director=> 'Steven Spielberg', :year=>1998, :genre=>'Action', :country =>'USA', :synopsis=>'saving ryan from the war')
-# m4 = Movie.create(:title=>'Titanic', :director=>'James Cameron', :year=>1997, :genre=>'Drama', :country=>'USA', :synopsis=>'boat goes down...')
+m1 = Movie.create(:title=>'Deep Red', :director=>'Dario Argento', :year=>1975, :genre=>'Horror', :country=>'Italy', :synopsis=>'A pianist investigates a series of murders performed by a mysterious figure wearing black leather gloves.')
+m2 = Movie.create(:title=>'Phantom of the Paradise', :director=>'Brian de Palma', :year=>1974, :genre=>'Horror', :country=>'USA', :synopsis=>'A pianists lifes work is stolen by a record tycoon, and he murders everyone who plays it.')
+m3 = Movie.create(:title=>'Saving Private Ryan', :director=> 'Steven Spielberg', :year=>1998, :genre=>'Action', :country =>'USA', :synopsis=>'saving ryan from the war')
+m4 = Movie.create(:title=>'Titanic', :director=>'James Cameron', :year=>1997, :genre=>'Drama', :country=>'USA', :synopsis=>'boat goes down...')
 
 # u1 = User.create(:name=>'Aaron')
 # u2 = User.create(:name=>'Julio')
