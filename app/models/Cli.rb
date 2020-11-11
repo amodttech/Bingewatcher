@@ -261,9 +261,6 @@ class CLI
 
     def delete_review(title)
         found_review = Review.all.select {|review| review.movie.title == title}
-        # binding.pry
-        # found_review.first.id
-
         Review.delete(found_review.first.id)
     end
 
