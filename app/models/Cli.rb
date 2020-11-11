@@ -131,7 +131,6 @@ class CLI
         menu = @@prompt.select("What would you like to do?") do |prompt|
             prompt.choice "Add a new Movie"
             prompt.choice "See a list of Movies"
-            prompt.choice Rainbow("Delete a Movie").red
             prompt.choice "Return to Main Menu"
         end
         case menu
@@ -139,8 +138,6 @@ class CLI
               self.create_movie
         when "See a list of Movies"
             self.list_movies
-        when Rainbow("Delete a Movie").red
-
         when "Return to Main Menu"  
             self.login_main_menu  
         end
