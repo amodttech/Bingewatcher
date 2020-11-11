@@ -40,7 +40,7 @@ class CLI
         password = @@prompt.mask("What is your Password?")
         @@user = User.find_by(name: username, password: password)
         if @@user
-            system('clear')
+            # system('clear')
             self.login_main_menu
         else
             puts "Incorrect"
@@ -73,6 +73,7 @@ class CLI
             prompt.choice "Movies"
             prompt.choice "Logout"
             prompt.choice Rainbow("Delete User").red
+            prompt.choice "Exit Bingewatcher"
         end
         case menu
         when "Reviews"
@@ -87,7 +88,10 @@ class CLI
             sleep(2)
             self.welcome    
         when Rainbow("Delete User").red
-            self.delete_menu
+            self.delete_user_menu
+        when "Exit Bingewatcher"
+            system('clear')
+            puts "Thanks for using Bingewatcher! please come again."    
         end
     end
 
@@ -97,13 +101,16 @@ class CLI
       menu = @@prompt.select("What would you like to do?") do |prompt|
         prompt.choice "Review a new Movie"
         prompt.choice "View your Reviews"
+        prompt.choice Rainbow("Delete a Review").red
         prompt.choice "Return to Main Menu"
       end
       case menu
       when "Review a new Movie"
         self.create_review
       when "View your Reviews"
-        self.view_reviews
+        self.user_reviews_results
+      when Rainbow("Delete a Review").red 
+        self.prompt_review_delete_menu
       when "Return to Main Menu"
         sleep(0.5)
         self.login_main_menu
@@ -113,10 +120,11 @@ class CLI
     def movies_menu
         system('clear')
         puts "Movies Menu"
+        puts "\n\n"
         menu = @@prompt.select("What would you like to do?") do |prompt|
             prompt.choice "Add a new Movie"
             prompt.choice "See a list of Movies"
-            prompt.choice "Delete a Movie"
+            prompt.choice Rainbow("Delete a Movie").red
             prompt.choice "Return to Main Menu"
         end
         case menu
@@ -124,7 +132,7 @@ class CLI
               self.create_movie
         when "See a list of Movies"
             Movie.all.each {|movie| puts movie.title}
-        when "Delete a Movie"
+        when Rainbow("Delete a Movie").red
 
         when "Return to Main Menu"  
             self.login_main_menu  
@@ -135,9 +143,13 @@ class CLI
 
         ##Review Methods##
 
-    def view_reviews ## currently outputs nicely
+    def user_reviews 
         results =  Review.all.select {|review| review.user_id == @@user.id}
-        results.each do |review|
+        results
+    end
+
+    def user_reviews_results ## currently outputs nicely
+        self.user_reviews.each do |review|
             puts "You have watched #{review.movie.title}, and given it #{review.rating} stars."
         end
     end
@@ -190,23 +202,57 @@ class CLI
 
     
     
-  ## DELETE MENU ##
+  ## DELETE MENUS ##
 
-    def delete_menu
+    def delete_user_menu
         system('clear')
         puts "Delete User Menu"
         menu = @@prompt.select("Are you sure you want to delete your user?") do |prompt|
-            prompt.choice "Yes"
+            prompt.choice Rainbow("Yes").red
             prompt.choice "No"
         end
         case menu
-        when "Yes"
-        
+        when Rainbow("Yes").red
+            User.delete(@@user)
+            system("clear")
+            puts "Your account was deleted. Returning to login menu."
+            self.main_menu
         when "No"  
             self.login_main_menu
         end      
+    end
+
+    def prompt_review_delete_menu
+        review_titles = user_reviews.map {|review| review.movie.title}
+        
+        selection = @@prompt.select("Reviews to Delete", review_titles)
+        #binding.pry
+        review_selection(selection)
+        selection.delete(selection)
+        puts "Your Review has been Deleted"
+        sleep(0.8)
+        self.reviews_menu
+    end
+
+    def review_selection(selection)
 
     end
+
+
+
+
+
+    # def user_reviews 
+    #     results =  Review.all.select {|review| review.user_id == @@user.id}
+    #     # results.each do |review|
+    #     #     puts "You have watched #{review.movie.title}, and given it #{review.rating} stars."
+    #     # end
+    #     results
+    # end
+
+
+
+
 
 end
     # def auth_sequence
