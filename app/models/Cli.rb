@@ -163,27 +163,49 @@ class CLI
         menu = @@prompt.select("User Review Options") do |prompt|
             prompt.choice "Update an Existing Review"
             prompt.choice "Make a New Review"
+            prompt.choice Rainbow("Delete a Review").red
             prompt.choice "Back to Previous Menu"
         end
         case menu
         when "Update an Existing Review"
-            self.change_review
+            self.change_review_menu
         when "Make a New Review"
             self.create_review
+        when Rainbow("Delete a Review").red 
+            self.review_delete_menu
         when "Back to Previous Menu"
             self.reviews_menu
         end
     end
 
-    def change_review
+    def change_review_menu
         system('clear')
-        puts "work in progress"
-        
+        puts "Update Review"
+        puts "\n"
+        review_titles = user_reviews.map {|review| review.movie.title}
+        selection = @@prompt.select("Select a Review to Update", review_titles)
+        # binding.pry
+
+
+
+
+        # change_review(selection)
+
+
+
     end
 
+    # def change_review(selection)  ### Helper for change_review_menu
+    #     found_review = Review.all.select {|review| review.movie.title == title}
+    #     Review.delete(found_review.first.id)
+    # end
+
+
+    
     def create_review  ## Is currently returning an instance, could be more legible
         system('clear')
         puts "New Review"
+        puts "\n"
         mov_title = @@prompt.ask("What is the Movie title?", required: true)
         mov_rating = @@prompt.ask("How many stars out of five would you rate this movie?")
         mov = Movie.find_by(title: mov_title)
@@ -209,6 +231,7 @@ class CLI
     def create_movie  ###adjust sleep timers   
         system('clear')
         puts "New Movie"
+        puts "\n"
         mov_title = @@prompt.ask("What is the Movie title?", require: true)
         if Movie.all.any? {|movie| movie.title == mov_title}
             puts "Hey, it looks like #{mov_title} already has an entry."
@@ -253,6 +276,7 @@ class CLI
     def delete_user_menu
         system('clear')
         puts "Delete User Menu"
+        puts "\n"
         menu = @@prompt.select("Are you sure you want to delete your user?") do |prompt|
             prompt.choice Rainbow("Yes").red
             prompt.choice "No"
@@ -270,11 +294,33 @@ class CLI
 
 
     def review_delete_menu
+        system('clear')
+        puts "Delete Review Menu"
+        puts "\n"
         review_titles = user_reviews.map {|review| review.movie.title}
         selection = @@prompt.select("Reviews to Delete", review_titles)
         # binding.pry
         delete_review(selection)
-
+        sleep(0.8)
+        puts "\n\n"
+        puts "#{selection} has been removed from your history."
+        puts "\n"
+        menu = @@prompt.select("What would you like to do next?") do |prompt|
+            prompt.choice "Update an Existing Review"
+            prompt.choice "Make a New Review"
+            prompt.choice Rainbow("Delete a Review").red
+            prompt.choice "Back to Previous Menu"
+        end
+        case menu
+        when "Update an Existing Review"
+            self.change_review_menu
+        when "Make a New Review"
+            self.create_review
+        when Rainbow("Delete a Review").red 
+            self.review_delete_menu
+        when "Back to Previous Menu"
+            self.reviews_menu
+        end
     end
 
     def delete_review(title) ## Helper for review_delete_menu

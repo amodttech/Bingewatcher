@@ -70,6 +70,9 @@ u5 = User.fifth
 
 Review.create([
     {user: u1, movie: m1, rating: 3},
+    {user: u1, movie: m2, rating: 2},
+    {user: u1, movie: m3, rating: 5},
+    {user: u1, movie: m4, rating: 1},
     {user_id: u2.id, movie_id: m2.id , rating: 5},
 
     # {user_id: , movie_id: , rating: },
