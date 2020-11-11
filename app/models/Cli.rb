@@ -245,11 +245,6 @@ class CLI
         end      
     end
 
-    # def user_reviews 
-    #     #binding.pry
-    #     results =  Review.all.select {|review| review.user_id == @@user.id}
-    #     results
-    # end
 
     def review_delete_menu
         review_titles = user_reviews.map {|review| review.movie.title}
@@ -259,7 +254,7 @@ class CLI
 
     end
 
-    def delete_review(title)
+    def delete_review(title) ## Helper for review_delete_menu
         found_review = Review.all.select {|review| review.movie.title == title}
         Review.delete(found_review.first.id)
     end
