@@ -101,6 +101,8 @@ class CLI
       menu = @@prompt.select("What would you like to do?") do |prompt|
         prompt.choice "Review a new Movie"
         prompt.choice "View your Reviews"
+        prompt.choice "Update an existing Review"
+        prompt.choice "View all average Reviews"
         prompt.choice Rainbow("Delete a Review").red
         prompt.choice "Return to Main Menu"
       end
@@ -109,6 +111,10 @@ class CLI
         self.create_review
       when "View your Reviews"
         self.user_reviews_results
+      when "Update an existing Review"
+        self.change_review
+      when "View all average Reviews"
+        self.global_average_reviews
       when Rainbow("Delete a Review").red 
         self.prompt_review_delete_menu
       when "Return to Main Menu"
@@ -144,6 +150,7 @@ class CLI
         ##Review Methods##
 
     def user_reviews 
+        #binding.pry
         results =  Review.all.select {|review| review.user_id == @@user.id}
         results
     end
@@ -168,6 +175,21 @@ class CLI
         self.reviews_menu
     end
 
+    def change_review
+
+    end
+
+    def hash_helper
+
+    end
+
+    def global_average_reviews
+        # Movie.all.map {|mov| mov.review.rating}
+        puts Review.group(:movie).count
+        binding.pry
+    end
+
+    #Review.all.sum { |rev| rev.review.rating} / Reviews.all.count
     
     ###Movie Methods###
 
@@ -224,14 +246,18 @@ class CLI
 
     def prompt_review_delete_menu
         review_titles = user_reviews.map {|review| review.movie.title}
-        
         selection = @@prompt.select("Reviews to Delete", review_titles)
         #binding.pry
-        review_selection(selection)
-        selection.delete(selection)
-        puts "Your Review has been Deleted"
-        sleep(0.8)
-        self.reviews_menu
+
+
+
+
+
+        # review_selection(selection)
+        # selection.delete(selection) #not working
+        # puts "Your Review has been Deleted"
+        # sleep(0.8)
+        # self.reviews_menu
     end
 
     def review_selection(selection)
