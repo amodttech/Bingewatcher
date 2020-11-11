@@ -255,7 +255,7 @@ class CLI
         review_titles = user_reviews.map {|review| review.movie.title}
         selection = @@prompt.select("Reviews to Delete", review_titles)
         # binding.pry
-        # delete_review(selection)
+        delete_review(selection)
 
     end
 
