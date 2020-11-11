@@ -155,7 +155,7 @@ class CLI
 
     def user_reviews_results ## currently outputs nicely
         self.user_reviews.each do |review|
-            puts "You have watched #{review.movie.title}, and given it #{review.rating} stars."
+            puts "You have watched #{Rainbow(review.movie.title).green}, and given it #{Rainbow(review.rating).orange} stars."
         end
         puts "\n\n\n"
 
@@ -185,14 +185,6 @@ class CLI
         review_titles = user_reviews.map {|review| review.movie.title}
         selection = @@prompt.select("Select a Review to Update", review_titles)
         # binding.pry
-
-
-
-
-        # change_review(selection)
-
-
-
     end
 
     # def change_review(selection)  ### Helper for change_review_menu
@@ -219,11 +211,11 @@ class CLI
 
 
 
-    def global_average_reviews
-        # Movie.all.map {|mov| mov.review.rating}
-        puts Review.group(:movie).count
-        binding.pry
-    end
+    # def global_average_reviews
+    #     # Movie.all.map {|mov| mov.review.rating}
+    #     puts Review.group(:movie).count
+    #     binding.pry
+    # end
 
     
     ###Movie Methods###
@@ -238,34 +230,58 @@ class CLI
             var1 = @@prompt.yes?("Would you like to leave a review?")
             if var1 
                 self.create_review
-            else
-                puts "okay fine, sending you back to the movie menu"
-                sleep(0.7)
-                self.movies_menu
+            # else
+            #     puts "okay fine, sending you back to the movie menu"
+            #     sleep(0.7)
+            #     self.movies_menu
             end
         else
             new_movie = Movie.create(title: mov_title)
             puts "Movie: '#{new_movie.title}' has been created!"
-            var2 = @@prompt.yes?("Would you like to leave a review?")
-            if var2 
-                self.create_review
-            else
-                puts "okay fine, sending you back to the movie menu"
-                sleep(0.7)
-                self.movies_menu
-            end
+        end
+        
+        puts "\n\n"
+
+        menu = @@prompt.select("What would you like to do next?") do |prompt|  ### Movie submenu
+            prompt.choice "Make a New Movie"
+            prompt.choice "See List of All Movies"
+            prompt.choice "Back to Previous Menu"
+        end
+        case menu
+        when "Make a New Movie"
+            self.create_movie
+        when "See List of All Movies"
+            self.list_movies
+        when "Back to Previous Menu"
+            self.movies_menu
         end
     end
 
     def list_movies
-        Movie.all.each {|movie| puts "#{movie.title}"}
+        system('clear')
+        puts "List of all Movies in System"
+        puts "\n"
+        title_array = Movie.all.map {|movie| movie.title}
+        title_array.sort!  #puts all titles in alphabetical order
+        title_array.each {|title| puts "#{title}"}
+        
         puts "\n\n\n"
-        if @@prompt.yes?("Back to previous menu?")
-            self.movies_menu
-        else
-            puts "\n\n\n"
-            self.list_movies
+
+        menu = @@prompt.select("What would you like to do next?") do |prompt|  ### Movie submenu
+            prompt.choice "Make a New Movie"
+            prompt.choice "Review One of these Movies"
+            prompt.choice "Back to Previous Menu"
         end
+
+        case menu
+        when "Make a New Movie"
+            self.create_movie
+        when "Review one of these Movies"
+            self.create_review
+        when "Back to Previous Menu"
+            self.movies_menu
+        end
+    
     end
 
 
@@ -286,8 +302,10 @@ class CLI
             User.delete(@@user.id)
             system("clear")
             puts "Your account was deleted. Returning to login menu."
+            sleep(2)
             self.main_menu
         when "No"  
+            sleep(1)
             self.login_main_menu
         end      
     end
