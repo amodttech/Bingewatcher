@@ -116,7 +116,7 @@ class CLI
       when "View all average Reviews"
         self.global_average_reviews
       when Rainbow("Delete a Review").red 
-        self.prompt_review_delete_menu
+        self.review_delete_menu
       when "Return to Main Menu"
         sleep(0.5)
         self.login_main_menu
@@ -150,11 +150,9 @@ class CLI
         ##Review Methods##
 
     def user_reviews 
-        #binding.pry
         results =  Review.all.select {|review| review.user_id == @@user.id}
         results
     end
-
 
 
     def user_reviews_results ## currently outputs nicely
@@ -238,7 +236,7 @@ class CLI
         end
         case menu
         when Rainbow("Yes").red
-            User.delete(@@user)
+            User.delete(@@user.id)
             system("clear")
             puts "Your account was deleted. Returning to login menu."
             self.main_menu
@@ -253,18 +251,20 @@ class CLI
     #     results
     # end
 
-    def prompt_review_delete_menu
+    def review_delete_menu
         review_titles = user_reviews.map {|review| review.movie.title}
         selection = @@prompt.select("Reviews to Delete", review_titles)
         # binding.pry
-        # Review.delete(review_id)
+        # delete_review(selection)
 
+    end
 
-        # review_selection(selection)
-        # selection.delete(selection) #not working
-        # puts "Your Review has been Deleted"
-        # sleep(0.8)
-        # self.reviews_menu
+    def delete_review(title)
+        found_review = Review.all.select {|review| review.movie.title == title}
+        # binding.pry
+        # found_review.first.id
+
+        Review.delete(found_review.first.id)
     end
 
 
