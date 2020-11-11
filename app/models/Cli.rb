@@ -195,7 +195,7 @@ class CLI
     
     ###Movie Methods###
 
-    def create_movie  ###adjust sleep timers
+    def create_movie  ###adjust sleep timers   
         system('clear')
         puts "New Movie"
         mov_title = @@prompt.ask("What is the Movie title?", require: true)
