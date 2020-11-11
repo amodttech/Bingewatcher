@@ -158,11 +158,22 @@ class CLI
             puts "You have watched #{review.movie.title}, and given it #{review.rating} stars."
         end
         puts "\n\n\n"
-        if @@prompt.yes?("Back to previous menu?")
-            self.reviews_menu
-        else
-            puts "\n\n\n"
-            self.user_reviews_results
+        # if @@prompt.yes?("Back to previous menu?")
+        #     self.reviews_menu
+        # else
+        #     puts "\n\n\n"
+        #     self.user_reviews_results
+        # end
+
+        menu = @@prompt.select("User Review Options") do |prompt|
+            prompt.choice "Update an Existing Review"
+            prompt.choice "Make a New Review"
+            prompt.choice "Back to Previous Menu"
+        end
+        case menu
+        when "Update an Existing Review"
+        when "Make a New Review"
+        when "Back to Previous Menu"
         end
     end
 
