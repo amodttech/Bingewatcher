@@ -40,8 +40,8 @@ class CLI
         password = @@prompt.mask("What is your Password?")
         @@user = User.find_by(name: username, password: password)
         if @@user
-            # system('clear')
             self.login_main_menu
+            system('clear')
         else
             puts "Incorrect"
             sleep(1)
@@ -67,6 +67,7 @@ class CLI
 ### AFTER SUCCESSFUL LOGIN
 
     def login_main_menu
+        system('clear')
         puts "Hi #{@@user.name} what would you like to do?"
         menu = @@prompt.select("Main Menu") do |prompt|
             prompt.choice "Reviews"
