@@ -158,12 +158,7 @@ class CLI
             puts "You have watched #{review.movie.title}, and given it #{review.rating} stars."
         end
         puts "\n\n\n"
-        # if @@prompt.yes?("Back to previous menu?")
-        #     self.reviews_menu
-        # else
-        #     puts "\n\n\n"
-        #     self.user_reviews_results
-        # end
+
 
         menu = @@prompt.select("User Review Options") do |prompt|
             prompt.choice "Update an Existing Review"
@@ -172,12 +167,19 @@ class CLI
         end
         case menu
         when "Update an Existing Review"
+            self.change_review
         when "Make a New Review"
+            self.create_review
         when "Back to Previous Menu"
+            self.reviews_menu
         end
     end
 
-
+    def change_review
+        system('clear')
+        puts "work in progress"
+        
+    end
 
     def create_review  ## Is currently returning an instance, could be more legible
         system('clear')
