@@ -138,7 +138,7 @@ class CLI
         when "Add a new Movie"
               self.create_movie
         when "See a list of Movies"
-            Movie.all.each {|movie| puts movie.title}
+            self.list_movies
         when Rainbow("Delete a Movie").red
 
         when "Return to Main Menu"  
@@ -164,6 +164,7 @@ class CLI
         if @@prompt.yes?("Back to previous menu?")
             self.reviews_menu
         else
+            puts "\n\n\n"
             self.user_reviews_results
         end
     end
@@ -220,6 +221,17 @@ class CLI
                 sleep(0.7)
                 self.movies_menu
             end
+        end
+    end
+
+    def list_movies
+        Movie.all.each {|movie| puts "#{movie.title}"}
+        puts "\n\n\n"
+        if @@prompt.yes?("Back to previous menu?")
+            self.movies_menu
+        else
+            puts "\n\n\n"
+            self.list_movies
         end
     end
 
