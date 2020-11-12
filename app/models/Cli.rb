@@ -234,7 +234,9 @@ class CLI
         puts "New Review"
         puts "\n"
         mov_title = @@prompt.ask("What is the Movie title?", required: true)
-        if (Movie.all.any? {|movie| movie.title == mov_title}) #&& Review.all.any
+            does_movie_exist = Movie.all.any? {|movie| movie.title == mov_title}
+            does_review_exist = Review.all.any? {|review| (review.movie.title == mov_title) && (review.user.name == @@user.name)}
+        if (does_movie_exist == true) && (does_review_exist == false)
             puts "\n\n"
             mov_rating = @@prompt.ask("How many stars out of five would you rate this movie?", convert: :int)
             mov = Movie.find_by(title: mov_title)
@@ -242,27 +244,29 @@ class CLI
             puts "\n\n"
             puts "New review has been recorded!  You have given #{Rainbow(new_review.movie.title).orange} a rating of #{Rainbow(new_review.rating).pink}."
             puts "\n\n"
+        elsif (does_movie_exist == true) && (does_review_exist == true)
+            old_review = Review.all.select {|review| (review.movie.title == mov_title) && (review.user.name == @@user.name)}.first
+            puts "You have previously given #{Rainbow(mov_title).orange} a rating of #{Rainbow(old_review.rating).pink}."
+            puts "\n\n"
         else
             puts "Sorry #{Rainbow(@@user.name).blue}, but #{Rainbow(mov_title).orange} doesn't exist in our system yet."
             puts "\n\n"
-            menu = @@prompt.select("Would you like to create an entry for #{Rainbow(mov_title).orange}?") do |prompt| 
-                prompt.choice "Make a New Movie"
-                prompt.choice "See List of All Movies"
-                prompt.choice "Back to Previous Menu"
-            end
-            case menu
-            when "Make a New Movie"
-                self.create_movie
-            when "See List of All Movies"
-                self.list_movies_menu
-            when "Back to Previous Menu"
-                self.movies_menu
-            end
-
-
-
         end
-        exit
+        menu = @@prompt.select("What would you like to do next?") do |prompt| 
+            prompt.choice "Make a New Movie"
+            prompt.choice "Update an Existing Review"
+            prompt.choice "Make a New Review"
+            prompt.choice Rainbow("Delete a Review").red
+            prompt.choice "Back to Previous Menu"
+        end
+        case menu
+        when "Make a New Movie"
+            self.create_movie
+        when "See List of All Movies"
+            self.list_movies_menu
+        when "Back to Previous Menu"
+            self.movies_menu
+        end
         
         
         
