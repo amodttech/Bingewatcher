@@ -31,7 +31,9 @@ Movie.create([
     {title: 'Deep Red', director: 'Dario Argento', year: 1975, genre: 'Horror', country: 'Italy', synopsis: 'A pianist investigates a series of murders performed by a mysterious figure wearing black leather gloves.'},
     {title: 'Phantom of the Paradise', director: 'Brian de Palma', year: 1974, genre: 'Horror', country: 'USA', synopsis: 'A pianists lifes work is stolen by a record tycoon, and he murders everyone who plays it.'},
     {title: 'Saving Private Ryan', director:  'Steven Spielberg', year: 1998, genre: 'Action', country:  'USA', synopsis: 'saving ryan from the war'},
-    {title: 'Titanic', director: 'James Cameron', year: 1997, genre: 'Drama', country: 'USA', synopsis: 'boat goes down...'}
+    {title: 'Titanic', director: 'James Cameron', year: 1997, genre: 'Drama', country: 'USA', synopsis: 'boat goes down...'},
+    {title: 'Running Man', director: 'Paul Michael Glaser', year: 1987, genre: 'Action', country: 'USA', synopsis: 'future gladiator'}
+
 ])
 
 
@@ -48,6 +50,7 @@ m1 = Movie.first
 m2 = Movie.second
 m3 = Movie.third
 m4 = Movie.fourth
+
 
 u1 = User.first
 u2 = User.second
