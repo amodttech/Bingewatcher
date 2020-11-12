@@ -6,14 +6,18 @@ require 'json'
 
 class CLI
     @@prompt = TTY::Prompt.new
-    @@artii = Artii::Base.new :font => 'slant'
+    @@artii = Artii::Base.new :font => 'epic'
     @@user = nil
 
+    def splash
+        puts @@artii.asciify("Welcome to")
+        puts @@artii.asciify("Bingewatcher")
+    end
 
     def welcome
         system('clear')
-        puts @@artii.asciify("Welcome to")
-        puts @@artii.asciify("Bingewatcher")
+        self.splash
+        sleep(1.5)
         self.main_menu
         # login_main_menu
     end
@@ -21,22 +25,29 @@ class CLI
 ## LOGIN IN SCREENS
 
     def main_menu
-        sleep(1)
         system('clear')
+        self.splash
+        puts "\n\n"
         splash = @@prompt.select("Please Log In or Sign Up!") do |prompt| 
             prompt.choice "Log In"
             prompt.choice "Sign Up"
         end
         case splash 
         when "Log In"
+            sleep(0.5)
             self.login 
         when "Sign Up"
+            sleep(0.5)
             self.signup 
         end
-
     end
 
     def login
+        system('clear')
+        self.splash
+        puts "\n\n"
+        puts "Login"
+        puts "\n"
         username = @@prompt.ask("What is your Name?")
         password = @@prompt.mask("What is your Password?")
         @@user = User.find_by(name: username, password: password)
@@ -53,6 +64,9 @@ class CLI
     end
 
     def signup
+        system('clear')
+        self.splash
+        puts "\n\n"
         username = @@prompt.ask("What would you like to be called?")
         password = @@prompt.ask("What would you like your password to be?")
         @@user = User.create(name: username, password: password)
@@ -68,20 +82,36 @@ class CLI
 ### AFTER SUCCESSFUL LOGIN
 
     def login_main_menu
+        sleep(0.6)
         system('clear')
-        puts "Hi #{@@user.name} what would you like to do?"
+        self.splash
+        puts "\n\n"
+        puts "Hi #{Rainbow(@@user.name.capitalize).blue} what would you like to do?"
+        puts "\n"
         menu = @@prompt.select("Main Menu") do |prompt|
-            prompt.choice "Reviews"
-            prompt.choice "Movies"
+            prompt.choice "Create a New Movie"
+            prompt.choice "See a list of Movies"
+            prompt.choice "See a list of your Reviews"
+            prompt.choice "Update an Existing Review"
+            prompt.choice "Create a New Review"
+            prompt.choice Rainbow("Delete a Review").red
             prompt.choice "Logout"
             prompt.choice Rainbow("Delete User").red
             prompt.choice "Exit Bingewatcher"
         end
         case menu
-        when "Reviews"
-            self.reviews_menu
-        when "Movies"
-            self.movies_menu
+        when "Create a New Movie"
+            self.create_movie
+        when "See a list of Movies"
+            self.list_movies_menu
+        when "See a list of your Reviews"
+            self.user_reviews_results
+        when "Update an Existing Review"
+            self.change_review_menu
+        when "Create a New Review"
+            self.create_review
+        when Rainbow("Delete a Review").red
+            self.review_delete_menu
         when "Logout"
             sleep(0.5)
             system('clear')
@@ -93,61 +123,88 @@ class CLI
             self.delete_user_menu
         when "Exit Bingewatcher"
             system('clear')
-            puts "Thanks for using #{Rainbow("Bingewatcher").blue}! Please come again." 
+            puts "Thanks for using #{Rainbow("Bingewatcher").green}! Please come again." 
             puts "\n\n\n\n\n"
             exit
         end
     end
 
-    def reviews_menu
-      system('clear')
-      puts "Reviews Menu"
-      puts "\n\n"
-      menu = @@prompt.select("What would you like to do?") do |prompt|
-        prompt.choice "Review a new Movie"
-        prompt.choice "View your Reviews"
-        prompt.choice "Update an existing Review"
-        prompt.choice "View all average Reviews"
-        prompt.choice Rainbow("Delete a Review").red
-        prompt.choice "Return to Main Menu"
-      end
-      case menu
-      when "Review a new Movie"
-        self.create_review
-      when "View your Reviews"
-        self.user_reviews_results
-      when "Update an existing Review"
-        self.change_review_menu
-      when "View all average Reviews"
-        self.global_average_reviews
-      when Rainbow("Delete a Review").red 
-        self.review_delete_menu
-      when "Return to Main Menu"
-        sleep(0.5)
-        self.login_main_menu
-      end
-    end
+    # def reviews_menu
+    #   system('clear')
+    #   puts "Reviews Menu"
+    #   puts "\n\n"
+    #   menu = @@prompt.select("What would you like to do?") do |prompt|
+    #     prompt.choice "Review a new Movie"
+    #     prompt.choice "View your Reviews"
+    #     prompt.choice "Update an existing Review"
+    #     prompt.choice "View all average Reviews"
+    #     prompt.choice Rainbow("Delete a Review").red
+    #     prompt.choice "Return to Main Menu"
+    #   end
+    #   case menu
+    #   when "Review a new Movie"
+    #     self.create_review
+    #   when "View your Reviews"
+    #     self.user_reviews_results
+    #   when "Update an existing Review"
+    #     self.change_review_menu
+    #   when "View all average Reviews"
+    #     self.global_average_reviews
+    #   when Rainbow("Delete a Review").red 
+    #     self.review_delete_menu
+    #   when "Return to Main Menu"
+    #     sleep(0.5)
+    #     self.login_main_menu
+    #   end
+    # end
 
-    def movies_menu
-        system('clear')
-        puts "Movies Menu"
-        puts "\n\n"
-        menu = @@prompt.select("What would you like to do?") do |prompt|
-            prompt.choice "Add a new Movie"
+    # def movies_menu
+    #     system('clear')
+    #     puts "Movies Menu"
+    #     puts "\n\n"
+    #     menu = @@prompt.select("What would you like to do?") do |prompt|
+    #         prompt.choice "Add a new Movie"
+    #         prompt.choice "See a list of Movies"
+    #         prompt.choice "Return to Main Menu"
+    #     end
+    #     case menu
+    #     when "Add a new Movie"
+    #           self.create_movie
+    #     when "See a list of Movies"
+    #         self.list_movies_menu
+    #     when "Return to Main Menu"  
+    #         self.login_main_menu  
+    #     end
+
+    # end
+
+    def footer_menu
+        menu = @@prompt.select("What would you like to do next?") do |prompt| 
+            prompt.choice "Create a New Movie"
             prompt.choice "See a list of Movies"
-            prompt.choice "Return to Main Menu"
+            prompt.choice "View your Reviews"
+            prompt.choice "Update an Existing Review"
+            prompt.choice "Create a New Review"
+            prompt.choice Rainbow("Delete a Review").red
+            prompt.choice "Back to Main Menu"
         end
         case menu
-        when "Add a new Movie"
-              self.create_movie
+        when "Create a New Movie"
+            self.create_movie
         when "See a list of Movies"
             self.list_movies_menu
-        when "Return to Main Menu"  
-            self.login_main_menu  
+        when "See a list of your Reviews"
+            self.user_reviews_results
+        when "Update an Existing Review"
+            self.change_review_menu
+        when "Create a New Review"
+            self.create_review
+        when Rainbow("Delete a Review").red
+            self.review_delete_menu
+        when "Back to Main Menu"
+            self.login_main_menu
         end
-
     end
-
 
         ##Review Methods##
 
@@ -158,28 +215,14 @@ class CLI
 
 
     def user_reviews_results 
+        system('clear')
+        puts "Your Reviews"
+        puts "\n"
         self.user_reviews.each do |review|
-            puts "You have watched #{Rainbow(review.movie.title).green}, and given it #{Rainbow(review.rating).orange} stars."
+            puts "You have watched #{Rainbow(review.movie.title).orange}, and given it #{Rainbow(review.rating).pink} stars."
         end
-        puts "\n\n\n"
-
-
-        menu = @@prompt.select("User Review Options") do |prompt|
-            prompt.choice "Update an Existing Review"
-            prompt.choice "Make a New Review"
-            prompt.choice Rainbow("Delete a Review").red
-            prompt.choice "Back to Previous Menu"
-        end
-        case menu
-        when "Update an Existing Review"
-            self.change_review_menu
-        when "Make a New Review"
-            self.create_review
-        when Rainbow("Delete a Review").red 
-            self.review_delete_menu
-        when "Back to Previous Menu"
-            self.reviews_menu
-        end
+        puts "\n\n"
+        self.footer_menu
     end
 
 
@@ -198,7 +241,7 @@ class CLI
 
     def change_review(selection)  ### Helper for change_review_menu
         found_review = Review.all.select {|review| review.movie.title == selection}.first
-        new_rating = @@prompt.ask("What is the new rating you would like to give #{found_review.movie.title}?")
+        new_rating = @@prompt.ask("What is the new rating you would like to give #{Rainbow(found_review.movie.title).orange}?")
         # found_review.update(rating: new_rating)
         found_review.rating = new_rating
         found_review.save
@@ -208,33 +251,19 @@ class CLI
         puts "your new rating for #{Rainbow(found_review.movie.title).orange} is #{Rainbow(found_review.rating).pink}."
 
         puts "\n\n"
-        menu = @@prompt.select("User Review Options") do |prompt|
-            prompt.choice "Update an Existing Review"
-            prompt.choice "Make a New Review"
-            prompt.choice Rainbow("Delete a Review").red
-            prompt.choice "Back to Previous Menu"
-        end
-        case menu
-        when "Update an Existing Review"
-            self.change_review_menu
-        when "Make a New Review"
-            self.create_review
-        when Rainbow("Delete a Review").red 
-            self.review_delete_menu
-        when "Back to Previous Menu"
-            self.reviews_menu
-        end
-
+        self.footer_menu
     end
 
 
     
     def create_review  
         system('clear')
-        puts "New Review"
+        puts "Create New Review"
         puts "\n"
         mov_title = @@prompt.ask("What is the Movie title?", required: true)
-        if (Movie.all.any? {|movie| movie.title == mov_title}) #&& Review.all.any
+            does_movie_exist = Movie.all.any? {|movie| movie.title == mov_title}
+            does_review_exist = Review.all.any? {|review| (review.movie.title == mov_title) && (review.user.name == @@user.name)}
+        if (does_movie_exist == true) && (does_review_exist == false)
             puts "\n\n"
             mov_rating = @@prompt.ask("How many stars out of five would you rate this movie?", convert: :int)
             mov = Movie.find_by(title: mov_title)
@@ -242,20 +271,16 @@ class CLI
             puts "\n\n"
             puts "New review has been recorded!  You have given #{Rainbow(new_review.movie.title).orange} a rating of #{Rainbow(new_review.rating).pink}."
             puts "\n\n"
+        elsif (does_movie_exist == true) && (does_review_exist == true)
+            old_review = Review.all.select {|review| (review.movie.title == mov_title) && (review.user.name == @@user.name)}.first
+            puts "\n"
+            puts "You have previously given #{Rainbow(mov_title).orange} a rating of #{Rainbow(old_review.rating).pink}."
+            puts "\n\n"
         else
             puts "Sorry #{Rainbow(@@user.name).blue}, but #{Rainbow(mov_title).orange} doesn't exist in our system yet."
+            puts "\n\n"
         end
-        exit
-        
-        
-        
-        
-        
-        
-        sleep(1)
-        puts "Thank you for your insights, your review has been documented.  Returning you to the menu."
-        sleep(3)
-        self.reviews_menu
+        self.footer_menu
     end
 
 
@@ -275,31 +300,19 @@ class CLI
         puts "\n"
         mov_title = @@prompt.ask("What is the Movie title?", require: true)
         if Movie.all.any? {|movie| movie.title == mov_title}
-            puts "Hey, it looks like #{mov_title} already has an entry."
+            puts "Hey, it looks like #{Rainbow(mov_title).orange} already has an entry."
             var1 = @@prompt.yes?("Would you like to leave a review?")
             if var1 
                 self.create_review
             end
         else
             new_movie = Movie.create(title: mov_title)
-            puts "Movie: '#{new_movie.title}' has been created!"
+            puts "Movie: '#{Rainbow(new_movie.title).orange}' has been created!"
         end
         
         puts "\n\n"
 
-        menu = @@prompt.select("What would you like to do next?") do |prompt|  ### Movie submenu
-            prompt.choice "Make a New Movie"
-            prompt.choice "See List of All Movies"
-            prompt.choice "Back to Previous Menu"
-        end
-        case menu
-        when "Make a New Movie"
-            self.create_movie
-        when "See List of All Movies"
-            self.list_movies_menu
-        when "Back to Previous Menu"
-            self.movies_menu
-        end
+        self.footer_menu
     end
 
     def list_movies_menu
@@ -307,30 +320,14 @@ class CLI
         puts "List of all Movies in System"
         puts "\n"
         self.list_movies
-
-        menu = @@prompt.select("What would you like to do next?") do |prompt|  ### Movie submenu
-            prompt.choice "Make a New Movie"
-            prompt.choice "Review One of these Movies"
-            prompt.choice "Back to Previous Menu"
-        end
-
-        case menu
-        when "Make a New Movie"
-            self.create_movie
-        when "Review one of these Movies"
-            self.create_review
-        when "Back to Previous Menu"
-            self.movies_menu
-        end
-    
+        puts "\n\n"
+        self.footer_menu
     end
 
     def list_movies
         title_array = Movie.all.map {|movie| movie.title}
         title_array.sort!  #puts all titles in alphabetical order
-        title_array.each {|title| puts "#{title}"}
-        
-        puts "\n\n\n"
+        title_array.each {|title| puts "#{Rainbow(title).orange}"}
     end
 
     
@@ -354,7 +351,7 @@ class CLI
             self.main_menu
         when "No"  
             sleep(1)
-            self.login_main_menu
+            self.footer_menu
         end      
     end
 
@@ -369,24 +366,9 @@ class CLI
         delete_review(selection)
         sleep(0.8)
         puts "\n\n"
-        puts "#{selection} has been removed from your history."
-        puts "\n"
-        menu = @@prompt.select("What would you like to do next?") do |prompt|
-            prompt.choice "Update an Existing Review"
-            prompt.choice "Make a New Review"
-            prompt.choice Rainbow("Delete a Review").red
-            prompt.choice "Back to Previous Menu"
-        end
-        case menu
-        when "Update an Existing Review"
-            self.change_review_menu
-        when "Make a New Review"
-            self.create_review
-        when Rainbow("Delete a Review").red 
-            self.review_delete_menu
-        when "Back to Previous Menu"
-            self.reviews_menu
-        end
+        puts "#{Rainbow(selection).orange} has been removed from your history."
+        puts "\n\n"
+        self.footer_menu
     end
 
     def delete_review(title) ## Helper for review_delete_menu
