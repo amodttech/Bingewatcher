@@ -166,14 +166,14 @@ class CLI
 
         menu = @@prompt.select("User Review Options") do |prompt|
             prompt.choice "Update an Existing Review"
-            prompt.choice "Make a New Review"
+            prompt.choice "Create a New Review"
             prompt.choice Rainbow("Delete a Review").red
             prompt.choice "Back to Previous Menu"
         end
         case menu
         when "Update an Existing Review"
             self.change_review_menu
-        when "Make a New Review"
+        when "Create a New Review"
             self.create_review
         when Rainbow("Delete a Review").red 
             self.review_delete_menu
@@ -210,14 +210,14 @@ class CLI
         puts "\n\n"
         menu = @@prompt.select("User Review Options") do |prompt|
             prompt.choice "Update an Existing Review"
-            prompt.choice "Make a New Review"
+            prompt.choice "Create a New Review"
             prompt.choice Rainbow("Delete a Review").red
             prompt.choice "Back to Previous Menu"
         end
         case menu
         when "Update an Existing Review"
             self.change_review_menu
-        when "Make a New Review"
+        when "Create a New Review"
             self.create_review
         when Rainbow("Delete a Review").red 
             self.review_delete_menu
@@ -246,6 +246,7 @@ class CLI
             puts "\n\n"
         elsif (does_movie_exist == true) && (does_review_exist == true)
             old_review = Review.all.select {|review| (review.movie.title == mov_title) && (review.user.name == @@user.name)}.first
+            puts "\n"
             puts "You have previously given #{Rainbow(mov_title).orange} a rating of #{Rainbow(old_review.rating).pink}."
             puts "\n\n"
         else
@@ -253,30 +254,24 @@ class CLI
             puts "\n\n"
         end
         menu = @@prompt.select("What would you like to do next?") do |prompt| 
-            prompt.choice "Make a New Movie"
+            prompt.choice "Create a New Movie"
             prompt.choice "Update an Existing Review"
-            prompt.choice "Make a New Review"
+            prompt.choice "Create a New Review"
             prompt.choice Rainbow("Delete a Review").red
             prompt.choice "Back to Previous Menu"
         end
         case menu
-        when "Make a New Movie"
+        when "Create a New Movie"
             self.create_movie
-        when "See List of All Movies"
-            self.list_movies_menu
+        when "Update an Existing Review"
+            self.change_review_menu
+        when "Create a New Review"
+            self.create_review
+        when Rainbow("Delete a Review").red 
+            self.review_delete_menu
         when "Back to Previous Menu"
-            self.movies_menu
+            self.reviews_menu
         end
-        
-        
-        
-        
-        
-        
-        sleep(1)
-        puts "Thank you for your insights, your review has been documented.  Returning you to the menu."
-        sleep(3)
-        self.reviews_menu
     end
 
 
@@ -309,12 +304,12 @@ class CLI
         puts "\n\n"
 
         menu = @@prompt.select("What would you like to do next?") do |prompt|  ### Movie submenu
-            prompt.choice "Make a New Movie"
+            prompt.choice "Create a New Movie"
             prompt.choice "See List of All Movies"
             prompt.choice "Back to Previous Menu"
         end
         case menu
-        when "Make a New Movie"
+        when "Create a New Movie"
             self.create_movie
         when "See List of All Movies"
             self.list_movies_menu
@@ -330,13 +325,13 @@ class CLI
         self.list_movies
 
         menu = @@prompt.select("What would you like to do next?") do |prompt|  ### Movie submenu
-            prompt.choice "Make a New Movie"
+            prompt.choice "Create a New Movie"
             prompt.choice "Review One of these Movies"
             prompt.choice "Back to Previous Menu"
         end
 
         case menu
-        when "Make a New Movie"
+        when "Create a New Movie"
             self.create_movie
         when "Review one of these Movies"
             self.create_review
@@ -394,14 +389,14 @@ class CLI
         puts "\n"
         menu = @@prompt.select("What would you like to do next?") do |prompt|
             prompt.choice "Update an Existing Review"
-            prompt.choice "Make a New Review"
+            prompt.choice "Create a New Review"
             prompt.choice Rainbow("Delete a Review").red
             prompt.choice "Back to Previous Menu"
         end
         case menu
         when "Update an Existing Review"
             self.change_review_menu
-        when "Make a New Review"
+        when "Create a New Review"
             self.create_review
         when Rainbow("Delete a Review").red 
             self.review_delete_menu
