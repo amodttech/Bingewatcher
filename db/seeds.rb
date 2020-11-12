@@ -42,7 +42,15 @@ Movie.create([
     {title: 'Deep Red', director: 'Dario Argento', year: 1975, genre: 'Horror', country: 'Italy', synopsis: 'A pianist investigates a series of murders performed by a mysterious figure wearing black leather gloves.'},
     {title: 'Phantom of the Paradise', director: 'Brian de Palma', year: 1974, genre: 'Horror', country: 'USA', synopsis: 'A pianists lifes work is stolen by a record tycoon, and he murders everyone who plays it.'},
     {title: 'Saving Private Ryan', director:  'Steven Spielberg', year: 1998, genre: 'Action', country:  'USA', synopsis: 'saving ryan from the war'},
-    {title: 'Titanic', director: 'James Cameron', year: 1997, genre: 'Drama', country: 'USA', synopsis: 'boat goes down...'}
+    {title: 'Titanic', director: 'James Cameron', year: 1997, genre: 'Drama', country: 'USA', synopsis: 'boat goes down...'},
+    {title: 'Avatar', director: 'James Cameron', year: 2009, genre: 'Science Fiction', country: 'USA', synopsis: 'Humans and avatars meet in the alien World od Pandora'},
+    {title: '7 Pounds', director: 'Gabriele Muchino', year: 2008, genre: 'Drama', country: 'USA', synopsis: 'A man wh wants to donate his organs'},
+    {title: 'Elite Squad', director: 'Jose Padilha', year: 2008, genre: 'Action', country: 'Brazil', synopsis: 'Elite police squad enters the poorest slums'},
+    {title: 'Interstellar', director: 'Christopher Nolan', year: 2014, genre: 'Science Fiction', country: 'USA', synopsis: 'A brilliant NASA physicists finds a way to safe mankind'},
+    {title: 'The SpongeBob Movie', director: 'Tim Hill', year: 2020, genre: 'Cartoon', country: 'USA', synopsis: 'SpongeBob goes on wild adventures'},
+    {title: 'The Godfather', director: 'Francis Ford Coppola', year: 1972, genre: 'Mafia', country: 'USA', synopsis: 'The GodFather is made!!!'}
+    # {title: '', director: '', year: , genre: '', country: '', synopsis: ''}
+
 ])
 
 
@@ -59,6 +67,8 @@ m1 = Movie.first
 m2 = Movie.second
 m3 = Movie.third
 m4 = Movie.fourth
+m5 = Moview.fifth
+# m6 = Movie.
 
 u1 = User.first
 u2 = User.second
