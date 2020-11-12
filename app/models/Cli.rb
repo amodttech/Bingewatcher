@@ -19,7 +19,6 @@ class CLI
         self.splash
         sleep(1.5)
         self.main_menu
-        # login_main_menu
     end
 
 ## LOGIN IN SCREENS
@@ -42,11 +41,6 @@ class CLI
         end
     end
 
-    def dumb
-
-    end
-
-
     def login
         system('clear')
         self.splash
@@ -54,9 +48,11 @@ class CLI
         puts "Login"
         puts "\n"
         username = @@prompt.ask("What is your Name?")
+        puts "\n"
         password = @@prompt.mask("What is your Password?")
         @@user = User.find_by(name: username, password: password)
         if @@user
+            sleep(0.5)
             self.login_main_menu
             system('clear')
         else
@@ -83,6 +79,18 @@ class CLI
         self.main_menu
     end
 
+    def logout
+        sleep(0.5)
+        puts "Logging out"
+        sleep(0.5)
+        puts "\n"
+        puts "It's been reel"
+        sleep(2)
+        system('clear')
+        sleep(0.5)
+        self.welcome
+    end
+
 
 ### AFTER SUCCESSFUL LOGIN
 
@@ -96,7 +104,7 @@ class CLI
         menu = @@prompt.select("Main Menu") do |prompt|
             prompt.choice "Create a New Movie"
             prompt.choice "See a list of Movies"
-            prompt.choice "See a list of your Reviews"
+            prompt.choice "View your Reviews"
             prompt.choice "Update an Existing Review"
             prompt.choice "Create a New Review"
             prompt.choice Rainbow("Delete a Review").red
@@ -109,7 +117,7 @@ class CLI
             self.create_movie
         when "See a list of Movies"
             self.list_movies_menu
-        when "See a list of your Reviews"
+        when "View your Reviews"
             self.user_reviews_results
         when "Update an Existing Review"
             self.change_review_menu
@@ -118,12 +126,7 @@ class CLI
         when Rainbow("Delete a Review").red
             self.review_delete_menu
         when "Logout"
-            sleep(0.5)
-            system('clear')
-            sleep(1)
-            puts "goodbye"
-            sleep(2)
-            self.welcome    
+            self.logout
         when Rainbow("Delete User").red
             self.delete_user_menu
         when "Exit Bingewatcher"
@@ -133,55 +136,6 @@ class CLI
             exit
         end
     end
-
-    # def reviews_menu
-    #   system('clear')
-    #   puts "Reviews Menu"
-    #   puts "\n\n"
-    #   menu = @@prompt.select("What would you like to do?") do |prompt|
-    #     prompt.choice "Review a new Movie"
-    #     prompt.choice "View your Reviews"
-    #     prompt.choice "Update an existing Review"
-    #     prompt.choice "View all average Reviews"
-    #     prompt.choice Rainbow("Delete a Review").red
-    #     prompt.choice "Return to Main Menu"
-    #   end
-    #   case menu
-    #   when "Review a new Movie"
-    #     self.create_review
-    #   when "View your Reviews"
-    #     self.user_reviews_results
-    #   when "Update an existing Review"
-    #     self.change_review_menu
-    #   when "View all average Reviews"
-    #     self.global_average_reviews
-    #   when Rainbow("Delete a Review").red 
-    #     self.review_delete_menu
-    #   when "Return to Main Menu"
-    #     sleep(0.5)
-    #     self.login_main_menu
-    #   end
-    # end
-
-    # def movies_menu
-    #     system('clear')
-    #     puts "Movies Menu"
-    #     puts "\n\n"
-    #     menu = @@prompt.select("What would you like to do?") do |prompt|
-    #         prompt.choice "Add a new Movie"
-    #         prompt.choice "See a list of Movies"
-    #         prompt.choice "Return to Main Menu"
-    #     end
-    #     case menu
-    #     when "Add a new Movie"
-    #           self.create_movie
-    #     when "See a list of Movies"
-    #         self.list_movies_menu
-    #     when "Return to Main Menu"  
-    #         self.login_main_menu  
-    #     end
-
-    # end
 
     def footer_menu
         menu = @@prompt.select("What would you like to do next?") do |prompt| 
@@ -198,7 +152,7 @@ class CLI
             self.create_movie
         when "See a list of Movies"
             self.list_movies_menu
-        when "See a list of your Reviews"
+        when "View your Reviews"
             self.user_reviews_results
         when "Update an Existing Review"
             self.change_review_menu
@@ -213,12 +167,6 @@ class CLI
 
         ##Review Methods##
 
-    def user_reviews 
-        results =  Review.all.select {|review| review.user_id == @@user.id}
-        results
-    end
-
-
     def user_reviews_results 
         system('clear')
         puts "Your Reviews"
@@ -230,13 +178,19 @@ class CLI
         self.footer_menu
     end
 
+    def user_reviews 
+        results =  Review.all.select {|review| review.user_id == @@user.id}
+        results
+    end
+
+
 
     def change_review_menu
         system('clear')
         puts "Update Review"
         puts "\n"
         self.user_reviews.each do |review|
-            puts "You have watched #{Rainbow(review.movie.title).green}, and given it #{Rainbow(review.rating).orange} stars."
+            puts "You have watched #{Rainbow(review.movie.title).orange}, and given it #{Rainbow(review.rating).pink} stars."
         end
         puts "\n\n\n"
         review_titles = user_reviews.map {|review| review.movie.title}
@@ -250,7 +204,6 @@ class CLI
         # found_review.update(rating: new_rating)
         found_review.rating = new_rating
         found_review.save
-
 
         sleep(0.6)
         puts "your new rating for #{Rainbow(found_review.movie.title).orange} is #{Rainbow(found_review.rating).pink}."
