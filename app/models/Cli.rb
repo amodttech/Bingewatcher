@@ -92,13 +92,16 @@ class CLI
             self.delete_user_menu
         when "Exit Bingewatcher"
             system('clear')
-            puts "Thanks for using Bingewatcher! please come again."    
+            puts "Thanks for using #{Rainbow("Bingewatcher").blue}! Please come again." 
+            puts "\n\n\n\n\n"
+            exit
         end
     end
 
     def reviews_menu
       system('clear')
       puts "Reviews Menu"
+      puts "\n\n"
       menu = @@prompt.select("What would you like to do?") do |prompt|
         prompt.choice "Review a new Movie"
         prompt.choice "View your Reviews"
@@ -203,6 +206,23 @@ class CLI
         sleep(0.6)
         puts "your new rating for #{found_review.movie.title} is #{found_review.rating}."
 
+        puts "\n\n"
+        menu = @@prompt.select("User Review Options") do |prompt|
+            prompt.choice "Update an Existing Review"
+            prompt.choice "Make a New Review"
+            prompt.choice Rainbow("Delete a Review").red
+            prompt.choice "Back to Previous Menu"
+        end
+        case menu
+        when "Update an Existing Review"
+            self.change_review_menu
+        when "Make a New Review"
+            self.create_review
+        when Rainbow("Delete a Review").red 
+            self.review_delete_menu
+        when "Back to Previous Menu"
+            self.reviews_menu
+        end
 
     end
 
