@@ -6,14 +6,18 @@ require 'json'
 
 class CLI
     @@prompt = TTY::Prompt.new
-    @@artii = Artii::Base.new :font => 'slant'
+    @@artii = Artii::Base.new :font => 'epic'
     @@user = nil
 
+    def splash
+        puts @@artii.asciify("Welcome to")
+        puts @@artii.asciify("Bingewatcher")
+    end
 
     def welcome
         system('clear')
-        puts @@artii.asciify("Welcome to")
-        puts @@artii.asciify("Bingewatcher")
+        self.splash
+        sleep(1.5)
         self.main_menu
         # login_main_menu
     end
@@ -21,7 +25,8 @@ class CLI
 ## LOGIN IN SCREENS
 
     def main_menu
-        sleep(1.5)
+        system('clear')
+        self.splash
         puts "\n\n"
         splash = @@prompt.select("Please Log In or Sign Up!") do |prompt| 
             prompt.choice "Log In"
@@ -29,14 +34,18 @@ class CLI
         end
         case splash 
         when "Log In"
+            sleep(0.5)
             self.login 
         when "Sign Up"
+            sleep(0.5)
             self.signup 
         end
     end
 
     def login
         system('clear')
+        self.splash
+        puts "\n\n"
         puts "Login"
         puts "\n"
         username = @@prompt.ask("What is your Name?")
@@ -55,6 +64,9 @@ class CLI
     end
 
     def signup
+        system('clear')
+        self.splash
+        puts "\n\n"
         username = @@prompt.ask("What would you like to be called?")
         password = @@prompt.ask("What would you like your password to be?")
         @@user = User.create(name: username, password: password)
@@ -72,6 +84,8 @@ class CLI
     def login_main_menu
         sleep(0.6)
         system('clear')
+        self.splash
+        puts "\n\n"
         puts "Hi #{Rainbow(@@user.name.capitalize).blue} what would you like to do?"
         puts "\n"
         menu = @@prompt.select("Main Menu") do |prompt|
@@ -115,54 +129,54 @@ class CLI
         end
     end
 
-    def reviews_menu
-      system('clear')
-      puts "Reviews Menu"
-      puts "\n\n"
-      menu = @@prompt.select("What would you like to do?") do |prompt|
-        prompt.choice "Review a new Movie"
-        prompt.choice "View your Reviews"
-        prompt.choice "Update an existing Review"
-        prompt.choice "View all average Reviews"
-        prompt.choice Rainbow("Delete a Review").red
-        prompt.choice "Return to Main Menu"
-      end
-      case menu
-      when "Review a new Movie"
-        self.create_review
-      when "View your Reviews"
-        self.user_reviews_results
-      when "Update an existing Review"
-        self.change_review_menu
-      when "View all average Reviews"
-        self.global_average_reviews
-      when Rainbow("Delete a Review").red 
-        self.review_delete_menu
-      when "Return to Main Menu"
-        sleep(0.5)
-        self.login_main_menu
-      end
-    end
+    # def reviews_menu
+    #   system('clear')
+    #   puts "Reviews Menu"
+    #   puts "\n\n"
+    #   menu = @@prompt.select("What would you like to do?") do |prompt|
+    #     prompt.choice "Review a new Movie"
+    #     prompt.choice "View your Reviews"
+    #     prompt.choice "Update an existing Review"
+    #     prompt.choice "View all average Reviews"
+    #     prompt.choice Rainbow("Delete a Review").red
+    #     prompt.choice "Return to Main Menu"
+    #   end
+    #   case menu
+    #   when "Review a new Movie"
+    #     self.create_review
+    #   when "View your Reviews"
+    #     self.user_reviews_results
+    #   when "Update an existing Review"
+    #     self.change_review_menu
+    #   when "View all average Reviews"
+    #     self.global_average_reviews
+    #   when Rainbow("Delete a Review").red 
+    #     self.review_delete_menu
+    #   when "Return to Main Menu"
+    #     sleep(0.5)
+    #     self.login_main_menu
+    #   end
+    # end
 
-    def movies_menu
-        system('clear')
-        puts "Movies Menu"
-        puts "\n\n"
-        menu = @@prompt.select("What would you like to do?") do |prompt|
-            prompt.choice "Add a new Movie"
-            prompt.choice "See a list of Movies"
-            prompt.choice "Return to Main Menu"
-        end
-        case menu
-        when "Add a new Movie"
-              self.create_movie
-        when "See a list of Movies"
-            self.list_movies_menu
-        when "Return to Main Menu"  
-            self.login_main_menu  
-        end
+    # def movies_menu
+    #     system('clear')
+    #     puts "Movies Menu"
+    #     puts "\n\n"
+    #     menu = @@prompt.select("What would you like to do?") do |prompt|
+    #         prompt.choice "Add a new Movie"
+    #         prompt.choice "See a list of Movies"
+    #         prompt.choice "Return to Main Menu"
+    #     end
+    #     case menu
+    #     when "Add a new Movie"
+    #           self.create_movie
+    #     when "See a list of Movies"
+    #         self.list_movies_menu
+    #     when "Return to Main Menu"  
+    #         self.login_main_menu  
+    #     end
 
-    end
+    # end
 
     def footer_menu
         menu = @@prompt.select("What would you like to do next?") do |prompt| 
@@ -337,7 +351,7 @@ class CLI
             self.main_menu
         when "No"  
             sleep(1)
-            self.login_main_menu
+            self.footer_menu
         end      
     end
 
