@@ -244,6 +244,23 @@ class CLI
             puts "\n\n"
         else
             puts "Sorry #{Rainbow(@@user.name).blue}, but #{Rainbow(mov_title).orange} doesn't exist in our system yet."
+            puts "\n\n"
+            menu = @@prompt.select("Would you like to create an entry for #{Rainbow(mov_title).orange}?") do |prompt| 
+                prompt.choice "Make a New Movie"
+                prompt.choice "See List of All Movies"
+                prompt.choice "Back to Previous Menu"
+            end
+            case menu
+            when "Make a New Movie"
+                self.create_movie
+            when "See List of All Movies"
+                self.list_movies_menu
+            when "Back to Previous Menu"
+                self.movies_menu
+            end
+
+
+
         end
         exit
         
