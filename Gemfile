@@ -12,6 +12,7 @@ gem "pry"
 
 # to make API requests
 gem 'rest-client'
+gem 'omdb-api'
 
 # to prettify-CLI
 gem 'tty-prompt', '~> 0.22.0'

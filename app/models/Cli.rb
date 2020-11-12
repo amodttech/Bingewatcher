@@ -9,6 +9,7 @@ class CLI
     @@artii = Artii::Base.new :font => 'slant'
     @@user = nil
 
+
     def welcome
         system('clear')
         puts @@artii.asciify("Welcome to")
@@ -156,7 +157,7 @@ class CLI
     end
 
 
-    def user_reviews_results ## currently outputs nicely
+    def user_reviews_results 
         self.user_reviews.each do |review|
             puts "You have watched #{Rainbow(review.movie.title).green}, and given it #{Rainbow(review.rating).orange} stars."
         end
@@ -204,7 +205,7 @@ class CLI
 
 
         sleep(0.6)
-        puts "your new rating for #{found_review.movie.title} is #{found_review.rating}."
+        puts "your new rating for #{Rainbow(found_review.movie.title).orange} is #{Rainbow(found_review.rating).pink}."
 
         puts "\n\n"
         menu = @@prompt.select("User Review Options") do |prompt|
@@ -228,15 +229,29 @@ class CLI
 
 
     
-    def create_review  ## Is currently returning an instance, could be more legible
+    def create_review  
         system('clear')
         puts "New Review"
         puts "\n"
         mov_title = @@prompt.ask("What is the Movie title?", required: true)
-        mov_rating = @@prompt.ask("How many stars out of five would you rate this movie?")
-        mov = Movie.find_by(title: mov_title)
-        new_review = Review.create(user: @@user, movie: mov, rating: mov_rating)
-        puts new_review
+        if (Movie.all.any? {|movie| movie.title == mov_title}) #&& Review.all.any
+            puts "\n\n"
+            mov_rating = @@prompt.ask("How many stars out of five would you rate this movie?", convert: :int)
+            mov = Movie.find_by(title: mov_title)
+            new_review = Review.create(user: @@user, movie: mov, rating: mov_rating)
+            puts "\n\n"
+            puts "New review has been recorded!  You have given #{Rainbow(new_review.movie.title).orange} a rating of #{Rainbow(new_review.rating).pink}."
+            puts "\n\n"
+        else
+            puts "Sorry #{Rainbow(@@user.name).blue}, but #{Rainbow(mov_title).orange} doesn't exist in our system yet."
+        end
+        exit
+        
+        
+        
+        
+        
+        
         sleep(1)
         puts "Thank you for your insights, your review has been documented.  Returning you to the menu."
         sleep(3)

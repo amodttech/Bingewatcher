@@ -79,28 +79,28 @@ Review.create([
     # {user_id: , movie_id: , rating: }
 ])
 
-r1 = Review.first
-r2 = Review.second
+# r1 = Review.first
+# r2 = Review.second
 
-Movielist.create([
-    {user: u1},
-    {user: u2},
-    {user: u3},
-    {user: u4},
-    {user: u5}
-])
+# Movielist.create([
+#     {user: u1},
+#     {user: u2},
+#     {user: u3},
+#     {user: u4},
+#     {user: u5}
+# ])
 
-ml1 = Movielist.first
-ml2 = Movielist.second
-ml3 = Movielist.third
-ml4 = Movielist.fourth
-ml5 = Movielist.fifth
+# ml1 = Movielist.first
+# ml2 = Movielist.second
+# ml3 = Movielist.third
+# ml4 = Movielist.fourth
+# ml5 = Movielist.fifth
 
-Addmovietomovielist.create([
-    {movie: Movie.all.sample, movielist: Movielist.all.sample, priority: 1},
-    {movie: m2, movielist: ml5, priority: 2},
-    {movie: m3, movielist: ml1, priority: 3}
-])
+# Addmovietomovielist.create([
+#     {movie: Movie.all.sample, movielist: Movielist.all.sample, priority: 1},
+#     {movie: m2, movielist: ml5, priority: 2},
+#     {movie: m3, movielist: ml1, priority: 3}
+# ])
 
   
 # Driver.destroy_all
