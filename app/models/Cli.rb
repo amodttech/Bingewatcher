@@ -21,8 +21,8 @@ class CLI
 ## LOGIN IN SCREENS
 
     def main_menu
-        sleep(1)
-        system('clear')
+        sleep(1.5)
+        puts "\n\n"
         splash = @@prompt.select("Please Log In or Sign Up!") do |prompt| 
             prompt.choice "Log In"
             prompt.choice "Sign Up"
@@ -33,10 +33,12 @@ class CLI
         when "Sign Up"
             self.signup 
         end
-
     end
 
     def login
+        system('clear')
+        puts "Login"
+        puts "\n"
         username = @@prompt.ask("What is your Name?")
         password = @@prompt.mask("What is your Password?")
         @@user = User.find_by(name: username, password: password)
@@ -68,20 +70,34 @@ class CLI
 ### AFTER SUCCESSFUL LOGIN
 
     def login_main_menu
+        sleep(0.6)
         system('clear')
-        puts "Hi #{Rainbow(@@user.name).blue} what would you like to do?"
+        puts "Hi #{Rainbow(@@user.name.capitalize).blue} what would you like to do?"
+        puts "\n"
         menu = @@prompt.select("Main Menu") do |prompt|
-            prompt.choice "Reviews"
-            prompt.choice "Movies"
+            prompt.choice "Create a New Movie"
+            prompt.choice "See a list of Movies"
+            prompt.choice "See a list of your Reviews"
+            prompt.choice "Update an Existing Review"
+            prompt.choice "Create a New Review"
+            prompt.choice Rainbow("Delete a Review").red
             prompt.choice "Logout"
             prompt.choice Rainbow("Delete User").red
             prompt.choice "Exit Bingewatcher"
         end
         case menu
-        when "Reviews"
-            self.reviews_menu
-        when "Movies"
-            self.movies_menu
+        when "Create a New Movie"
+            self.create_movie
+        when "See a list of Movies"
+            self.list_movies_menu
+        when "See a list of your Reviews"
+            self.user_reviews_results
+        when "Update an Existing Review"
+            self.change_review_menu
+        when "Create a New Review"
+            self.create_review
+        when Rainbow("Delete a Review").red
+            self.review_delete_menu
         when "Logout"
             sleep(0.5)
             system('clear')
@@ -152,6 +168,7 @@ class CLI
         menu = @@prompt.select("What would you like to do next?") do |prompt| 
             prompt.choice "Create a New Movie"
             prompt.choice "See a list of Movies"
+            prompt.choice "View your Reviews"
             prompt.choice "Update an Existing Review"
             prompt.choice "Create a New Review"
             prompt.choice Rainbow("Delete a Review").red
@@ -162,6 +179,8 @@ class CLI
             self.create_movie
         when "See a list of Movies"
             self.list_movies_menu
+        when "See a list of your Reviews"
+            self.user_reviews_results
         when "Update an Existing Review"
             self.change_review_menu
         when "Create a New Review"
@@ -182,28 +201,14 @@ class CLI
 
 
     def user_reviews_results 
+        system('clear')
+        puts "Your Reviews"
+        puts "\n"
         self.user_reviews.each do |review|
             puts "You have watched #{Rainbow(review.movie.title).orange}, and given it #{Rainbow(review.rating).pink} stars."
         end
-        puts "\n\n\n"
-
-
-        menu = @@prompt.select("User Review Options") do |prompt|
-            prompt.choice "Update an Existing Review"
-            prompt.choice "Create a New Review"
-            prompt.choice Rainbow("Delete a Review").red
-            prompt.choice "Back to Previous Menu"
-        end
-        case menu
-        when "Update an Existing Review"
-            self.change_review_menu
-        when "Create a New Review"
-            self.create_review
-        when Rainbow("Delete a Review").red 
-            self.review_delete_menu
-        when "Back to Previous Menu"
-            self.reviews_menu
-        end
+        puts "\n\n"
+        self.footer_menu
     end
 
 
@@ -239,7 +244,7 @@ class CLI
     
     def create_review  
         system('clear')
-        puts "New Review"
+        puts "Create New Review"
         puts "\n"
         mov_title = @@prompt.ask("What is the Movie title?", required: true)
             does_movie_exist = Movie.all.any? {|movie| movie.title == mov_title}
