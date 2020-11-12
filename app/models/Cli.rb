@@ -69,7 +69,7 @@ class CLI
 
     def login_main_menu
         system('clear')
-        puts "Hi #{@@user.name} what would you like to do?"
+        puts "Hi #{Rainbow(@@user.name).blue} what would you like to do?"
         menu = @@prompt.select("Main Menu") do |prompt|
             prompt.choice "Reviews"
             prompt.choice "Movies"
@@ -93,7 +93,7 @@ class CLI
             self.delete_user_menu
         when "Exit Bingewatcher"
             system('clear')
-            puts "Thanks for using #{Rainbow("Bingewatcher").blue}! Please come again." 
+            puts "Thanks for using #{Rainbow("Bingewatcher").green}! Please come again." 
             puts "\n\n\n\n\n"
             exit
         end
@@ -159,7 +159,7 @@ class CLI
 
     def user_reviews_results 
         self.user_reviews.each do |review|
-            puts "You have watched #{Rainbow(review.movie.title).green}, and given it #{Rainbow(review.rating).orange} stars."
+            puts "You have watched #{Rainbow(review.movie.title).orange}, and given it #{Rainbow(review.rating).pink} stars."
         end
         puts "\n\n\n"
 
@@ -198,7 +198,7 @@ class CLI
 
     def change_review(selection)  ### Helper for change_review_menu
         found_review = Review.all.select {|review| review.movie.title == selection}.first
-        new_rating = @@prompt.ask("What is the new rating you would like to give #{found_review.movie.title}?")
+        new_rating = @@prompt.ask("What is the new rating you would like to give #{Rainbow(found_review.movie.title).orange}?")
         # found_review.update(rating: new_rating)
         found_review.rating = new_rating
         found_review.save
@@ -275,14 +275,14 @@ class CLI
         puts "\n"
         mov_title = @@prompt.ask("What is the Movie title?", require: true)
         if Movie.all.any? {|movie| movie.title == mov_title}
-            puts "Hey, it looks like #{mov_title} already has an entry."
+            puts "Hey, it looks like #{Rainbow(mov_title).orange} already has an entry."
             var1 = @@prompt.yes?("Would you like to leave a review?")
             if var1 
                 self.create_review
             end
         else
             new_movie = Movie.create(title: mov_title)
-            puts "Movie: '#{new_movie.title}' has been created!"
+            puts "Movie: '#{Rainbow(new_movie.title).orange}' has been created!"
         end
         
         puts "\n\n"
@@ -328,7 +328,7 @@ class CLI
     def list_movies
         title_array = Movie.all.map {|movie| movie.title}
         title_array.sort!  #puts all titles in alphabetical order
-        title_array.each {|title| puts "#{title}"}
+        title_array.each {|title| puts "#{Rainbow(title).orange}"}
         
         puts "\n\n\n"
     end
@@ -369,7 +369,7 @@ class CLI
         delete_review(selection)
         sleep(0.8)
         puts "\n\n"
-        puts "#{selection} has been removed from your history."
+        puts "#{Rainbow(selection).orange} has been removed from your history."
         puts "\n"
         menu = @@prompt.select("What would you like to do next?") do |prompt|
             prompt.choice "Update an Existing Review"
