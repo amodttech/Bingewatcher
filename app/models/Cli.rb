@@ -42,6 +42,11 @@ class CLI
         end
     end
 
+    def dumb
+
+    end
+
+
     def login
         system('clear')
         self.splash
