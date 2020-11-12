@@ -113,7 +113,7 @@ class CLI
       when "View your Reviews"
         self.user_reviews_results
       when "Update an existing Review"
-        self.change_review
+        self.change_review_menu
       when "View all average Reviews"
         self.global_average_reviews
       when Rainbow("Delete a Review").red 
@@ -137,7 +137,7 @@ class CLI
         when "Add a new Movie"
               self.create_movie
         when "See a list of Movies"
-            self.list_movies
+            self.list_movies_menu
         when "Return to Main Menu"  
             self.login_main_menu  
         end
@@ -178,19 +178,33 @@ class CLI
         end
     end
 
+
     def change_review_menu
         system('clear')
         puts "Update Review"
         puts "\n"
+        self.user_reviews.each do |review|
+            puts "You have watched #{Rainbow(review.movie.title).green}, and given it #{Rainbow(review.rating).orange} stars."
+        end
+        puts "\n\n\n"
         review_titles = user_reviews.map {|review| review.movie.title}
         selection = @@prompt.select("Select a Review to Update", review_titles)
-        # binding.pry
+        change_review(selection)
     end
 
-    # def change_review(selection)  ### Helper for change_review_menu
-    #     found_review = Review.all.select {|review| review.movie.title == title}
-    #     Review.delete(found_review.first.id)
-    # end
+    def change_review(selection)  ### Helper for change_review_menu
+        found_review = Review.all.select {|review| review.movie.title == selection}.first
+        new_rating = @@prompt.ask("What is the new rating you would like to give #{found_review.movie.title}?")
+        # found_review.update(rating: new_rating)
+        found_review.rating = new_rating
+        found_review.save
+
+
+        sleep(0.6)
+        puts "your new rating for #{found_review.movie.title} is #{found_review.rating}."
+
+
+    end
 
 
     
@@ -230,10 +244,6 @@ class CLI
             var1 = @@prompt.yes?("Would you like to leave a review?")
             if var1 
                 self.create_review
-            # else
-            #     puts "okay fine, sending you back to the movie menu"
-            #     sleep(0.7)
-            #     self.movies_menu
             end
         else
             new_movie = Movie.create(title: mov_title)
@@ -251,21 +261,17 @@ class CLI
         when "Make a New Movie"
             self.create_movie
         when "See List of All Movies"
-            self.list_movies
+            self.list_movies_menu
         when "Back to Previous Menu"
             self.movies_menu
         end
     end
 
-    def list_movies
+    def list_movies_menu
         system('clear')
         puts "List of all Movies in System"
         puts "\n"
-        title_array = Movie.all.map {|movie| movie.title}
-        title_array.sort!  #puts all titles in alphabetical order
-        title_array.each {|title| puts "#{title}"}
-        
-        puts "\n\n\n"
+        self.list_movies
 
         menu = @@prompt.select("What would you like to do next?") do |prompt|  ### Movie submenu
             prompt.choice "Make a New Movie"
@@ -284,6 +290,13 @@ class CLI
     
     end
 
+    def list_movies
+        title_array = Movie.all.map {|movie| movie.title}
+        title_array.sort!  #puts all titles in alphabetical order
+        title_array.each {|title| puts "#{title}"}
+        
+        puts "\n\n\n"
+    end
 
     
     
