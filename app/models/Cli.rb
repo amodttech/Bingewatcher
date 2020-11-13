@@ -38,6 +38,7 @@ class CLI
         splash = @@prompt.select(Rainbow("Please Log In or Sign Up!").lightseagreen) do |prompt| 
             prompt.choice "Log In"
             prompt.choice "Sign Up"
+            prompt.choice "Exit Bingewatcher"
         end
         case splash 
         when "Log In"
@@ -46,6 +47,16 @@ class CLI
         when "Sign Up"
             sleep(0.5)
             self.signup 
+        when "Exit Bingewatcher"
+            sleep(1.5)            
+            system('clear')
+            self.splash
+            puts "\n\n"
+            sleep(2)
+            puts "Thanks for using #{Rainbow("Bingewatcher").gold}! Please come again." 
+            puts "\n\n\n\n\n"
+            sleep(2)
+            exit
         end
     end
 
