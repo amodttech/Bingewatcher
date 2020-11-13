@@ -382,9 +382,12 @@ class CLI
     end
 
     def delete_review(title) ## Helper for review_delete_menu
-        found_review = Review.all.select {|review| review.movie.title == title}
-        Review.delete(found_review.first.id)
+        found_review = Review.all.select {|review| (review.movie.title == title) && (review.user.name == @@user.name) }
+        # binding.pry
+        # Review.delete(found_review.first.id)
+        Review.find_by(id: found_review.first.id).destroy
+        # binding.pry
     end
 
-
+    # does_review_exist = Review.all.any? {|review| (review.movie.title == mov_title) && (review.user.name == @@user.name)}
 end
