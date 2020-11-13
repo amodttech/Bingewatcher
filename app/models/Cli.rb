@@ -37,14 +37,14 @@ class CLI
         puts "\n\n"
         splash = @@prompt.select(Rainbow("Please Log In or Sign Up!").lightseagreen) do |prompt| 
             prompt.choice "Log In"
-            prompt.choice "Sign Up"
+            prompt.choice "New User"
             prompt.choice "Exit Bingewatcher"
         end
         case splash 
         when "Log In"
             sleep(0.5)
             self.login 
-        when "Sign Up"
+        when "New User"
             sleep(0.5)
             self.signup 
         when "Exit Bingewatcher"
