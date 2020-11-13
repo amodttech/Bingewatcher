@@ -120,7 +120,7 @@ class CLI
         puts Rainbow("What would you like to do?").lightseagreen
         puts "\n"
         menu = @@prompt.select("Main Menu") do |prompt|
-            prompt.choice "average"
+            # prompt.choice "average"
             prompt.choice "Create a New Movie"
             prompt.choice "See a list of Movies"
             prompt.choice "View your Reviews"
@@ -132,8 +132,8 @@ class CLI
             prompt.choice "Exit Bingewatcher"
         end
         case menu
-        when "average"
-            self.average
+        # when "average"
+        #     self.average
         when "Create a New Movie"
             self.create_movie
         when "See a list of Movies"
@@ -273,17 +273,17 @@ class CLI
         self.footer_menu
     end
 
-    def average
-        movie_title = @@prompt.ask("gimmie a movie title")
-        puts "#{self.global_average_reviews(movie_title)}"
-    end
+    # def average
+    #     movie_title = @@prompt.ask("gimmie a movie title")
+    #     puts "#{self.global_average_reviews(movie_title)}"
+    # end
 
 
-    def global_average_reviews(movie_title)
-        all_reviews = Review.all.select {|review| review.movie.title == movie_title}
-        average = (all_reviews.size/all_reviews.count).round(2)
-        binding.pry
-    end
+    # def global_average_reviews(movie_title)
+    #     all_reviews = Review.all.select {|review| review.movie.title == movie_title}
+    #     average = (all_reviews.size/all_reviews.count).round(2)
+    #     binding.pry
+    # end
 
     
 

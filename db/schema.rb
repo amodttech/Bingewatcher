@@ -12,21 +12,6 @@
 
 ActiveRecord::Schema.define(version: 2020_11_10_021454) do
 
-  create_table "addmovietomovielists", force: :cascade do |t|
-    t.integer "movie_id"
-    t.integer "movielist_id"
-    t.integer "priority"
-  end
-
-  create_table "friends", force: :cascade do |t|
-    t.integer "user_1_id"
-    t.integer "user_2_id"
-  end
-
-  create_table "movielists", force: :cascade do |t|
-    t.integer "user_id"
-  end
-
   create_table "movies", force: :cascade do |t|
     t.string "title"
     t.string "director"
