@@ -6,12 +6,13 @@ require 'json'
 
 class CLI
     @@prompt = TTY::Prompt.new
-    @@artii = Artii::Base.new :font => 'epic'
+    @@artii1 = Artii::Base.new :font => 'doom'
+    @@artii2 = Artii::Base.new :font => 'cybersmall'
     @@user = nil
 
     def splash
-        puts @@artii.asciify("Welcome to")
-        puts @@artii.asciify("Bingewatcher")
+        puts @@artii2.asciify("Welcome to")
+        puts Rainbow(@@artii1.asciify("Bingewatcher")).gold
     end
 
     def welcome
@@ -27,7 +28,7 @@ class CLI
         system('clear')
         self.splash
         puts "\n\n"
-        splash = @@prompt.select("Please Log In or Sign Up!") do |prompt| 
+        splash = @@prompt.select(Rainbow("Please Log In or Sign Up!").lightseagreen) do |prompt| 
             prompt.choice "Log In"
             prompt.choice "Sign Up"
         end
@@ -45,7 +46,7 @@ class CLI
         system('clear')
         self.splash
         puts "\n\n"
-        puts "Login"
+        puts Rainbow("LOGIN").lightseagreen
         puts "\n"
         username = @@prompt.ask("What is your Name?")
         puts "\n"
@@ -99,7 +100,7 @@ class CLI
         system('clear')
         self.splash
         puts "\n\n"
-        puts "Hi #{Rainbow(@@user.name.capitalize).blue} what would you like to do?"
+        puts Rainbow("Hi #{@@user.name.capitalize}, what would you like to do?").lightseagreen
         puts "\n"
         menu = @@prompt.select("Main Menu") do |prompt|
             prompt.choice "average"
@@ -172,7 +173,9 @@ class CLI
 
     def user_reviews_results 
         system('clear')
-        puts "Your Reviews"
+        self.splash
+        puts "\n\n"
+        puts Rainbow("YOUR REVIEWS").lightseagreen
         puts "\n"
         self.user_reviews.each do |review|
             puts "You have watched #{Rainbow(review.movie.title).orange}, and given it #{Rainbow(review.rating).pink} stars."
@@ -190,7 +193,9 @@ class CLI
 
     def change_review_menu
         system('clear')
-        puts "Update Review"
+        self.splash
+        puts "\n\n"
+        puts Rainbow("UPDATE REVIEW").lightseagreen
         puts "\n"
         self.user_reviews.each do |review|
             puts "You have watched #{Rainbow(review.movie.title).orange}, and given it #{Rainbow(review.rating).pink} stars."
@@ -219,7 +224,9 @@ class CLI
     
     def create_review  
         system('clear')
-        puts "Create New Review"
+        self.splash
+        puts "\n\n"
+        puts Rainbow("CREATE NEW REVIEW").lightseagreen
         puts "\n"
         mov_title = @@prompt.ask("What is the Movie title?", required: true)
             does_movie_exist = Movie.all.any? {|movie| movie.title == mov_title}
@@ -266,7 +273,9 @@ class CLI
 
     def create_movie  ###adjust sleep timers   
         system('clear')
-        puts "New Movie"
+        self.splash
+        puts "\n\n"
+        puts Rainbow("CREATE NEW MOVIE").lightseagreen
         puts "\n"
         mov_title = @@prompt.ask("What is the Movie title?", require: true)
         if Movie.all.any? {|movie| movie.title == mov_title}
@@ -287,7 +296,9 @@ class CLI
 
     def list_movies_menu
         system('clear')
-        puts "List of all Movies in System"
+        self.splash
+        puts "\n\n"
+        puts Rainbow("ALL MOVIES IN THE SYSTEM").lightseagreen
         puts "\n"
         self.list_movies
         puts "\n\n"
@@ -306,9 +317,11 @@ class CLI
 
     def delete_user_menu
         system('clear')
-        puts "Delete User Menu"
+        self.splash
+        puts "\n\n"
+        puts Rainbow("DELETE USER").red
         puts "\n"
-        menu = @@prompt.select("Are you sure you want to delete your user?") do |prompt|
+        menu = @@prompt.select("Are you sure you want to delete your user? (this cannot be reversed)") do |prompt|
             prompt.choice Rainbow("Yes").red
             prompt.choice "No"
         end
@@ -316,8 +329,8 @@ class CLI
         when Rainbow("Yes").red
             User.delete(@@user.id)
             system("clear")
-            puts "Your account was deleted. Returning to login menu."
-            sleep(2)
+            puts "Your account was #{Rainbow("DELETED").red}. Returning to login menu."
+            sleep(3)
             self.main_menu
         when "No"  
             sleep(1)
@@ -328,10 +341,12 @@ class CLI
 
     def review_delete_menu
         system('clear')
-        puts "Delete Review Menu"
+        self.splash
+        puts "\n\n"
+        puts Rainbow("DELETE REVIEW").red
         puts "\n"
         review_titles = user_reviews.map {|review| review.movie.title}
-        selection = @@prompt.select("Reviews to Delete", review_titles)
+        selection = @@prompt.select("Select Review for Deletion (this cannot be reversed)", review_titles)
         # binding.pry
         delete_review(selection)
         sleep(0.8)
