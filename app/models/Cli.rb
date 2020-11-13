@@ -220,7 +220,7 @@ class CLI
         puts Rainbow("UPDATE REVIEW").lightseagreen
         puts "\n"
         self.user_reviews.each do |review|
-            puts "You have watched #{Rainbow(review.movie.title).orange}, and given it #{Rainbow(review.rating).pink} stars."
+            puts "You have watched #{Rainbow(review.movie.title).orange}, and given it #{Rainbow(review.rating).salmon} stars."
         end
         puts "\n\n\n"
         review_titles = user_reviews.map {|review| review.movie.title}
@@ -229,14 +229,15 @@ class CLI
     end
 
     def change_review(selection)  ### Helper for change_review_menu
-        found_review = Review.all.select {|review| review.movie.title == selection}.first
+        found_review = Review.all.select {|review| (review.movie.title == selection) && (review.user.name == @@user.name)}.first
         new_rating = @@prompt.ask("What is the new rating you would like to give #{Rainbow(found_review.movie.title).orange}?")
         # found_review.update(rating: new_rating)
-        found_review.rating = new_rating
-        found_review.save
+        # found_review.rating = new_rating
+        # found_review.save
+        found_review.update(rating: new_rating)
 
         sleep(0.6)
-        puts "your new rating for #{Rainbow(found_review.movie.title).orange} is #{Rainbow(found_review.rating).pink}."
+        puts "your new rating for #{Rainbow(found_review.movie.title).orange} is #{Rainbow(found_review.rating).salmon}."
 
         puts "\n\n"
         self.footer_menu
@@ -259,12 +260,12 @@ class CLI
             mov = Movie.find_by(title: mov_title)
             new_review = Review.create(user: @@user, movie: mov, rating: mov_rating)
             puts "\n\n"
-            puts "New review has been recorded!  You have given #{Rainbow(new_review.movie.title).orange} a rating of #{Rainbow(new_review.rating).pink}."
+            puts "New review has been recorded!  You have given #{Rainbow(new_review.movie.title).orange} a rating of #{Rainbow(new_review.rating).salmon}."
             puts "\n\n"
         elsif (does_movie_exist == true) && (does_review_exist == true)
             old_review = Review.all.select {|review| (review.movie.title == mov_title) && (review.user.name == @@user.name)}.first
             puts "\n"
-            puts "You have previously given #{Rainbow(mov_title).orange} a rating of #{Rainbow(old_review.rating).pink}."
+            puts "You have previously given #{Rainbow(mov_title).orange} a rating of #{Rainbow(old_review.rating).salmon}."
             puts "\n\n"
         else
             puts "Sorry #{Rainbow(@@user.name).coral}, but #{Rainbow(mov_title).orange} doesn't exist in our system yet."
