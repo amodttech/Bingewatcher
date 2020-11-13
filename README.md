@@ -14,4 +14,4 @@ Within Bingewatcher, users can
 -Update/Delete their previous reviews
 -Create movie entries
 
-Be gentle, it's our first time making an app
+Be gentle, it's our first time making an app.
