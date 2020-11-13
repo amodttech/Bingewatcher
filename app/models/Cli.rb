@@ -11,13 +11,20 @@ class CLI
     @@user = nil
 
     def splash
-        puts @@artii2.asciify("Welcome to")
+        puts Rainbow(@@artii2.asciify("Welcome to")).coral
+        puts Rainbow(@@artii1.asciify("Bingewatcher")).gold
+    end
+
+    def startup
+        sleep(1)
+        puts Rainbow(@@artii2.asciify("Welcome to")).coral
+        sleep(1.8)
         puts Rainbow(@@artii1.asciify("Bingewatcher")).gold
     end
 
     def welcome
         system('clear')
-        self.splash
+        self.startup
         sleep(1.5)
         self.main_menu
     end
@@ -55,12 +62,14 @@ class CLI
         if @@user
             sleep(0.5)
             self.login_main_menu
-            system('clear')
         else
-            puts "Incorrect"
-            sleep(1)
-            puts "taking you back"
-            sleep(1)
+            sleep(0.5)
+            puts "\n"
+            puts "I'm sorry, but that did not match our records."
+            sleep(1.5)
+            puts "\n"
+            puts "...loading previous page..."
+            sleep(2)            
             self.main_menu
         end
     end
@@ -70,22 +79,29 @@ class CLI
         self.splash
         puts "\n\n"
         username = @@prompt.ask("What would you like to be called?")
+        puts "\n"
         password = @@prompt.ask("What would you like your password to be?")
         @@user = User.create(name: username, password: password)
+        puts "\n\n"
+        sleep(1.2)
         puts "Thank you for joining us"
-        sleep(0.5)
+        sleep(1.5)
+        puts "\n"
         puts "Taking you to the login now"
-        sleep(0.8)
-        system('clear')
+        sleep(1.8)
         self.main_menu
     end
 
     def logout
-        sleep(0.5)
+        sleep(1)
+        system('clear')
+        self.splash
+        puts "\n\n"
+        sleep(1)
         puts "Logging out"
-        sleep(0.5)
+        sleep(1.2)
         puts "\n"
-        puts "It's been reel"
+        puts "It's been reel..."
         sleep(2)
         system('clear')
         sleep(0.5)
@@ -100,7 +116,8 @@ class CLI
         system('clear')
         self.splash
         puts "\n\n"
-        puts Rainbow("Hi #{@@user.name.capitalize}, what would you like to do?").lightseagreen
+        puts Rainbow("Hi, #{Rainbow(@@user.name.capitalize).coral}").lightseagreen
+        puts Rainbow("What would you like to do?").lightseagreen
         puts "\n"
         menu = @@prompt.select("Main Menu") do |prompt|
             prompt.choice "average"
@@ -134,9 +151,14 @@ class CLI
         when Rainbow("Delete User").red
             self.delete_user_menu
         when "Exit Bingewatcher"
+            sleep(1.5)            
             system('clear')
-            puts "Thanks for using #{Rainbow("Bingewatcher").green}! Please come again." 
+            self.splash
+            puts "\n\n"
+            sleep(2)
+            puts "Thanks for using #{Rainbow("Bingewatcher").gold}! Please come again." 
             puts "\n\n\n\n\n"
+            sleep(2)
             exit
         end
     end
@@ -178,7 +200,7 @@ class CLI
         puts Rainbow("YOUR REVIEWS").lightseagreen
         puts "\n"
         self.user_reviews.each do |review|
-            puts "You have watched #{Rainbow(review.movie.title).orange}, and given it #{Rainbow(review.rating).pink} stars."
+            puts "You have watched #{Rainbow(review.movie.title).orange}, and given it #{Rainbow(review.rating).salmon} stars."
         end
         puts "\n\n"
         self.footer_menu
@@ -245,7 +267,7 @@ class CLI
             puts "You have previously given #{Rainbow(mov_title).orange} a rating of #{Rainbow(old_review.rating).pink}."
             puts "\n\n"
         else
-            puts "Sorry #{Rainbow(@@user.name).blue}, but #{Rainbow(mov_title).orange} doesn't exist in our system yet."
+            puts "Sorry #{Rainbow(@@user.name).coral}, but #{Rainbow(mov_title).orange} doesn't exist in our system yet."
             puts "\n\n"
         end
         self.footer_menu
@@ -328,8 +350,11 @@ class CLI
         case menu
         when Rainbow("Yes").red
             User.delete(@@user.id)
-            system("clear")
-            puts "Your account was #{Rainbow("DELETED").red}. Returning to login menu."
+            sleep(0.5)
+            system('clear')
+            self.splash
+            puts "\n\n"
+            puts "Your account: #{Rainbow(@@user.name).coral} was #{Rainbow("DELETED").red}. Returning to login menu."
             sleep(3)
             self.main_menu
         when "No"  
