@@ -23,7 +23,7 @@ require 'json'
 Movie.destroy_all
 Review.destroy_all
 User.destroy_all
-Movielist.destroy_all
+# Movielist.destroy_all
 # AddMovieToMovielist.destroy_all
 
 
@@ -38,64 +38,99 @@ Movie.create([
     {title: 'Interstellar', director: 'Christopher Nolan', year: 2014, genre: 'Science Fiction', country: 'USA', synopsis: 'A brilliant NASA physicists finds a way to safe mankind'},
     {title: 'The SpongeBob Movie', director: 'Tim Hill', year: 2020, genre: 'Cartoon', country: 'USA', synopsis: 'SpongeBob goes on wild adventures'},
     {title: 'The Godfather', director: 'Francis Ford Coppola', year: 1972, genre: 'Mafia', country: 'USA', synopsis: 'The GodFather is made!!!'},
-    # {title: '', director: '', year: , genre: '', country: '', synopsis: ''}
     {title: 'Running Man', director: 'Paul Michael Glaser', year: 1987, genre: 'Action', country: 'USA', synopsis: 'future gladiator'}
 
 ])
 
-
 User.create([
     {name: 'a', password: 'a'},
-    {name: 'Julio', password: 'fizz'},
-    {name: 'Jonathan', password: 'buzz'},
-    {name: 'Anber', password: 'fizzbuzz'},
-    {name: 'Melissa', password: 'wordpass'},
-    {name: 'Aaron', password: 'password'}
+    {name: 'Julio', password: 'a'},
+    {name: 'Jonathan', password: 'a'},
+    {name: 'Anber', password: 'a'},
+    {name: 'Melissa', password: 'a'},
+    {name: 'Aaron', password: 'a'},
+    {name: 'Cavan', password: 'a'},
+    {name: 'Fernando', password: 'a'},
+    {name: 'Stephanie', password: 'a'},
+    {name: 'Ameera', password: 'a'}
 ])
 
-m1 = Movie.first
-m2 = Movie.second
-m3 = Movie.third
-m4 = Movie.fourth
-m5 = Moview.fifth
-# m6 = Movie.
+m1 = Movie.find_by title: 'Deep Red'
+m2 = Movie.find_by title: 'Phantom of the Paradise'
+m3 = Movie.find_by title: 'Saving Private Ryan'
+m4 = Movie.find_by title: 'Titanic'
+m5 = Movie.find_by title: 'Avatar'
+m6 = Movie.find_by title: '7 Pounds'
+m7 = Movie.find_by title: 'Elite Squad'
+m8 = Movie.find_by title: 'Interstellar'
+m9 = Movie.find_by title: 'The SpongeBob Movie'
+m10 = Movie.find_by title: 'The Godfather'
+m11 = Movie.find_by title: 'Running Man'
 
 
-u1 = User.first
-u2 = User.second
-u3 = User.third
-u4 = User.fourth
-u5 = User.fifth
+u1 = User.find_by name: 'Julio'
+u2 = User.find_by name: 'Jonathan'
+u3 = User.find_by name: 'Anber'
+u4 = User.find_by name: 'Melissa'
+u5 = User.find_by name: 'Aaron'
+u6 = User.find_by name: 'Cavan'
+u7 = User.find_by name: 'Fernando'
+u8 = User.find_by name: 'Stephanie'
+u9 = User.find_by name: 'Ameera'
+u10 = User.first
 
 
 
 Review.create([
     {user: u1, movie: m1, rating: 3},
-    {user: u1, movie: m2, rating: 2},
-    {user: u1, movie: m3, rating: 5},
-    {user: u1, movie: m4, rating: 1},
-    {user_id: u2.id, movie_id: m2.id , rating: 5},
-
-    # {user_id: , movie_id: , rating: },
-    # {user_id: , movie_id: , rating: }
+    {user: u1, movie: m11, rating: 4},
+    {user: u1, movie: m2, rating: 5},
+    {user: u1, movie: m6, rating: 3},
+    {user: u2, movie: m2, rating: 1},
+    {user: u2, movie: m4, rating: 2},
+    {user: u3, movie: m1, rating: 5},
+    {user: u3, movie: m8, rating: 5},
+    {user: u3, movie: m7, rating: 4},
+    {user: u3, movie: m5, rating: 3},
+    {user: u3, movie: m9, rating: 3},
+    {user: u4, movie: m1, rating: 2},
+    {user: u4, movie: m4, rating: 1},
+    {user: u4, movie: m2, rating: 3},
+    {user: u4, movie: m3, rating: 4},
+    {user: u4, movie: m7, rating: 3},
+    {user: u5, movie: m6, rating: 5},
+    {user: u5, movie: m3, rating: 2},
+    {user: u6, movie: m1, rating: 4},
+    {user: u6, movie: m8, rating: 1},
+    {user: u6, movie: m2, rating: 4},
+    {user: u7, movie: m1, rating: 4},
+    {user: u8, movie: m10, rating: 3},
+    {user: u9, movie: m8, rating: 2},
+    {user: u9, movie: m7, rating: 1},
+    {user: u10, movie: m8, rating: 2},
+    {user: u10, movie: m10, rating: 5},
+    {user: u10, movie: m1, rating: 4},
+    {user: u10, movie: m11, rating: 3},
+    {user: u10, movie: m4, rating: 2},
+    {user: u10, movie: m6, rating: 5}
 ])
 
 # r1 = Review.first
 # r2 = Review.second
 
-Movielist.create([
-    {user: u1},
-    {user: u2},
-    {user: u3},
-    {user: u4},
-    {user: u5}
-])
+# Movielist.create([
+#     {user: u1},
+#     {user: u2},
+#     {user: u3},
+#     {user: u4},
+#     {user: u5}
+# ])
 
-ml1 = Movielist.first
-ml2 = Movielist.second
-ml3 = Movielist.third
-ml4 = Movielist.fourth
-ml5 = Movielist.fifth
+# ml1 = Movielist.first
+# ml2 = Movielist.second
+# ml3 = Movielist.third
+# ml4 = Movielist.fourth
+# ml5 = Movielist.fifth
 
 # Addmovietomovielist.create([
 #     {movie: Movie.all.sample, movielist: Movielist.all.sample, priority: 1},
